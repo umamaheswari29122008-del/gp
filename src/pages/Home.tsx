@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronDown, Shield, Zap, RotateCcw, Timer, Droplets, Award, Thermometer, Star, Quote, Image as ImageIcon } from 'lucide-react';
+import { ArrowRight, ChevronDown, Shield, Zap, RotateCcw, Timer, Droplets, Award, Thermometer, Star, Quote, Image as ImageIcon, CheckCircle2, Globe, Users, Leaf } from 'lucide-react';
 import MagicRings from '../components/MagicRings';
 import { useContent } from '../context/ContentContext';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  Timer, Droplets, RotateCcw, Award, Shield, Zap, Thermometer,
+  Timer, Droplets, RotateCcw, Award, Shield, Zap, Thermometer, Globe, Users, Leaf,
 };
 
 const snowflakes = Array.from({ length: 22 }, (_, i) => ({
@@ -111,7 +111,7 @@ function ProductPhotoCard({
 
 export function Home() {
   const content = useContent();
-  const { hero, stats, big_stats, services, home_applications, testimonials, home_products, about_snippets, about_page, site, home_sections } = content;
+  const { hero, stats, big_stats, services, home_applications, testimonials, home_products, about_snippets, about_page, site, home_sections, values, features, certifications } = content;
 
   const [loaded, setLoaded] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -148,48 +148,48 @@ export function Home() {
 
         <div className={`relative z-10 max-w-7xl mx-auto px-6 w-full pt-28 pb-20 transition-all duration-1000 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-ice-300 text-sm font-semibold mb-6 border border-ice-500/20">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-ice-300 text-xs font-semibold mb-6 border border-ice-500/20">
               <span className="w-1.5 h-1.5 rounded-full bg-ice-400 animate-pulse" />
               {hero.badge_text}
             </div>
-            <h1 className="font-display text-5xl lg:text-[5.5rem] font-bold leading-[1.05] text-white mb-6">
-              {hero.headline_line1}{' '}
-              <span className="gradient-text text-glow">{hero.headline_line2}</span>{' '}
-              {hero.headline_line3}{' '}
+            <h1 className="font-display text-5xl lg:text-[4.6rem] font-bold leading-[1.04] text-white mb-5">
+              {hero.headline_line1}<br />
+              <span className="gradient-text text-glow">{hero.headline_line2}</span><br />
+              {hero.headline_line3}<br />
               <span className="gradient-text">{hero.headline_line4}</span>
             </h1>
-            <p className="text-ice-100/70 text-xl leading-relaxed mb-8 max-w-2xl"
+            <p className="text-ice-100/70 text-lg leading-relaxed mb-7 max-w-lg"
               dangerouslySetInnerHTML={{ __html: hero.subheadline }} />
 
-            <div className="flex gap-8 mb-8">
+            <div className="flex gap-7 mb-7">
               {stats.map(({ icon, value, label, color }) => {
                 const Icon = ICON_MAP[icon] || Shield;
                 return (
                   <div key={label} className="text-center">
-                    <Icon className={`w-5 h-5 ${color} mx-auto mb-1.5`} />
-                    <div className={`font-display font-bold text-2xl ${color}`}>{value}</div>
-                    <div className="text-ice-300/50 text-sm">{label}</div>
+                    <Icon className={`w-4 h-4 ${color} mx-auto mb-1`} />
+                    <div className={`font-display font-bold text-xl ${color}`}>{value}</div>
+                    <div className="text-ice-300/50 text-xs">{label}</div>
                   </div>
                 );
               })}
             </div>
 
-            <div className="flex flex-wrap gap-4 mb-7">
-              <Link to="/products" className="glow-button inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-ice-500 text-white font-bold text-base shadow-lg shadow-ice-500/35 hover:bg-ice-400 transition-colors">
-                {hero.btn_products_text} <ArrowRight className="w-5 h-5" />
+            <div className="flex flex-wrap gap-3 mb-6">
+              <Link to="/products" className="glow-button inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-ice-500 text-white font-bold text-sm shadow-lg shadow-ice-500/35 hover:bg-ice-400 transition-colors">
+                {hero.btn_products_text} <ArrowRight className="w-4 h-4" />
               </Link>
               <a href={site.whatsapp_number} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-green-500/18 border border-green-500/35 text-green-300 font-bold text-base hover:bg-green-500/28 transition-colors">
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-green-500/18 border border-green-500/35 text-green-300 font-bold text-sm hover:bg-green-500/28 transition-colors">
                 {hero.btn_whatsapp_text}
               </a>
             </div>
 
-            <div className="flex flex-wrap gap-2.5">
+            <div className="flex flex-wrap gap-2">
               {services.map(({ icon, text }) => {
                 const Icon = ICON_MAP[icon] || Shield;
                 return (
-                  <span key={text} className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-ice-300 bg-ice-500/10 border border-ice-500/20">
-                    <Icon className="w-4 h-4" /> {text}
+                  <span key={text} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-ice-300 bg-ice-500/10 border border-ice-500/20">
+                    <Icon className="w-3.5 h-3.5" /> {text}
                   </span>
                 );
               })}
@@ -363,6 +363,70 @@ export function Home() {
                 <p className="text-[#5a7a9a] text-sm leading-relaxed mb-3 italic line-clamp-3">"{t.text}"</p>
                 <div className="text-[#0d2a5a] font-semibold text-sm">{t.name}</div>
                 <div className="text-[#1a56a0]/55 text-sm">{t.role}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── VALUES — light blue ─── */}
+      <section className="py-16 light-section-blue">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-10 section-reveal">
+            <div className="light-badge mb-4">{about_page.values_badge}</div>
+            <h2 className="font-display text-4xl lg:text-5xl font-bold light-heading mb-3">
+              {about_page.values_title.split('Us Forward')[0]}<span className="gradient-text-dark">Us Forward</span>
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {values.map((v, i) => {
+              const Icon = ICON_MAP[v.icon] || Shield;
+              return (
+                <div key={v.title} className="section-reveal light-card rounded-2xl p-6 group" style={{ transitionDelay: `${i * 0.08}s` }}>
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${v.color} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-display font-semibold text-[#0d2a5a] text-base mb-2">{v.title}</h3>
+                  <p className="text-[#5a7a9a] text-sm leading-relaxed">{v.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FEATURES — dark theme ─── */}
+      <section className="py-16" style={{ background: '#030c1e' }}>
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-10 section-reveal">
+            <h2 className="font-display text-4xl lg:text-5xl font-bold text-white mb-3">
+              {about_page.features_title.split('Standards')[0]}<span className="gradient-text">Standards</span>
+            </h2>
+            <p className="text-ice-200/60 text-lg max-w-2xl mx-auto">{about_page.features_sub}</p>
+          </div>
+          <div className="section-reveal">
+            <div className="grid md:grid-cols-2 gap-3">
+              {features.map((f, i) => (
+                <div key={f.id || i} className="flex items-start gap-3 glass-card rounded-xl px-4 py-3">
+                  <CheckCircle2 className="w-5 h-5 text-ice-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-ice-200/70 text-sm leading-relaxed">{f.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── CERTIFICATIONS — light blue ─── */}
+      <section className="py-14 light-section-blue">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 section-reveal">
+            {certifications.map((cert) => (
+              <div key={cert.name} className="light-card rounded-2xl py-5 px-4 text-center">
+                <div className="w-10 h-10 rounded-xl bg-[#e8f2fc] border border-[#c5ddf5] flex items-center justify-center mx-auto mb-3">
+                  <Shield className="w-5 h-5 text-[#1a56a0]" />
+                </div>
+                <div className="text-[#0d2a5a] font-semibold text-sm">{cert.name}</div>
               </div>
             ))}
           </div>
