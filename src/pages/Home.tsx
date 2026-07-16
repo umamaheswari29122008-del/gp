@@ -317,7 +317,7 @@ export function Home() {
       </section>
 
       {/* ─── TESTIMONIALS — light blue ─── */}
-      <section className="py-16 relative overflow-hidden light-section-blue-deep">
+      <section className="py-10 relative overflow-hidden light-section-blue-deep">
         <div className="absolute inset-0 pointer-events-none opacity-[0.04]"
           style={{ backgroundImage: 'radial-gradient(circle, rgba(26,86,160,1) 1px, transparent 1px)', backgroundSize: '28px 28px' }} />
         <div className="max-w-5xl mx-auto px-6">
@@ -370,7 +370,7 @@ export function Home() {
       </section>
 
       {/* ─── VALUES — light blue ─── */}
-      <section className="py-16 light-section-blue">
+      <section className="py-10 light-section-blue">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-10 section-reveal">
             <div className="light-badge mb-4">{about_page.values_badge}</div>
