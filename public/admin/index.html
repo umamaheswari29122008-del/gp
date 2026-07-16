@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dove Gel Packs — Admin</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0d1117;--s:#161b22;--s2:#21262d;--b:#30363d;
+  --accent:#0ea5e9;--accent2:#38bdf8;
+  --text:#e6edf3;--muted:#8b949e;
+  --danger:#f85149;--ok:#3fb950;--warn:#d29922;
+}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+a{color:var(--accent);}
+
+/* ── Auth ── */
+#auth{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.auth-card{background:var(--s);border:1px solid var(--b);border-radius:14px;padding:36px 32px;width:100%;max-width:400px;}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:24px;}
+.brand-icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#1e7ec8,#0d5ba0);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:1.1rem;}
+.brand-name{font-weight:700;font-size:1rem;color:#fff;}
+.auth-card h1{font-size:1.25rem;font-weight:700;color:#fff;margin-bottom:4px;}
+.auth-card p{color:var(--muted);font-size:.825rem;margin-bottom:22px;line-height:1.5;}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.field label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+.field input,.field select,.field textarea{background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:10px 12px;color:var(--text);font-size:.875rem;font-family:inherit;width:100%;}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);}
+.field textarea{resize:vertical;min-height:72px;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;border-radius:9px;font-size:.825rem;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:inherit;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:var(--accent2);}
+.btn-ghost{background:var(--s2);color:var(--text);border:1px solid var(--b);}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent);}
+.btn-danger{background:rgba(248,81,73,.15);color:var(--danger);border:1px solid rgba(248,81,73,.25);}
+.btn-danger:hover{background:rgba(248,81,73,.25);}
+.btn-sm{padding:5px 10px;font-size:.76rem;}
+.btn-full{width:100%;}
+.btn:disabled{opacity:.55;cursor:not-allowed;}
+.err{background:rgba(248,81,73,.1);border:1px solid rgba(248,81,73,.3);color:var(--danger);border-radius:8px;padding:10px 14px;font-size:.8rem;margin-bottom:14px;}
+.ok-msg{background:rgba(63,185,80,.1);border:1px solid rgba(63,185,80,.3);color:var(--ok);border-radius:8px;padding:10px 14px;font-size:.8rem;margin-bottom:14px;}
+
+/* ── App shell ── */
+#app{display:flex;min-height:100vh;}
+#sidebar{width:220px;flex-shrink:0;background:var(--s);border-right:1px solid var(--b);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sb-head{padding:16px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:9px;}
+.sb-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#1e7ec8,#0d5ba0);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:.85rem;flex-shrink:0;}
+.sb-title{font-weight:700;font-size:.9rem;color:#fff;line-height:1.2;}
+.sb-sub{font-size:.7rem;color:var(--muted);}
+nav{flex:1;padding:10px 8px;}
+.nav-group{color:var(--muted);font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:10px 8px 4px;}
+.nav-btn{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--muted);font-size:.825rem;font-weight:500;transition:all .15s;border:none;background:none;width:100%;text-align:left;}
+.nav-btn:hover{background:var(--s2);color:var(--text);}
+.nav-btn.on{background:rgba(14,165,233,.15);color:var(--accent);}
+.nav-btn svg{width:14px;height:14px;flex-shrink:0;}
+.sb-foot{padding:10px 8px;border-top:1px solid var(--b);}
+#main-area{flex:1;display:flex;flex-direction:column;min-width:0;}
+.top-bar{background:var(--s);border-bottom:1px solid var(--b);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;}
+.top-bar h1{font-size:1rem;font-weight:700;color:#fff;}
+.page-body{padding:24px;max-width:960px;}
+
+/* ── Cards & lists ── */
+.card{background:var(--s);border:1px solid var(--b);border-radius:12px;overflow:hidden;margin-bottom:18px;}
+.card-head{padding:14px 18px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.card-head h2{font-size:.875rem;font-weight:700;color:#fff;}
+.card-body{padding:18px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:600px){.grid2{grid-template-columns:1fr;}}
+.span2{grid-column:1/-1;}
+.item-list{display:flex;flex-direction:column;gap:8px;}
+.item{background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;}
+.item-body{flex:1;min-width:0;}
+.item-title{font-weight:600;color:#fff;font-size:.825rem;margin-bottom:2px;}
+.item-meta{color:var(--muted);font-size:.75rem;white-space:pre-wrap;}
+.item-actions{display:flex;gap:6px;flex-shrink:0;}
+
+/* ── Modal ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;}
+.modal{background:var(--s);border:1px solid var(--b);border-radius:14px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;}
+.modal-head{padding:16px 20px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;}
+.modal-head h3{font-size:.925rem;font-weight:700;color:#fff;}
+.modal-body{padding:20px;}
+.modal-foot{padding:12px 20px;border-top:1px solid var(--b);display:flex;justify-content:flex-end;gap:8px;}
+
+/* ── Upload ── */
+.upload-zone{border:2px dashed var(--b);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:border-color .2s;background:var(--s2);}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);}
+.upload-zone input[type=file]{display:none;}
+.upload-zone img{max-width:160px;max-height:110px;border-radius:7px;object-fit:cover;margin:0 auto 8px;display:block;}
+.upload-zone small{color:var(--muted);font-size:.75rem;}
+
+/* ── Toast ── */
+.toast{position:fixed;bottom:20px;right:20px;z-index:200;padding:12px 18px;border-radius:10px;font-size:.8rem;font-weight:600;max-width:300px;animation:fadeUp .25s ease;}
+.toast.ok{background:#1a3a22;border:1px solid rgba(63,185,80,.4);color:var(--ok);}
+.toast.err{background:#3a1a1a;border:1px solid rgba(248,81,73,.4);color:var(--danger);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+.hidden{display:none!important;}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;vertical-align:middle;margin-right:4px;}
+</style>
+</head>
+<body>
+
+<!-- ── Auth screen ──────────────────────────────────────────────────── -->
+<div id="auth">
+  <!-- setup box shown when no admin exists -->
+  <div class="auth-card hidden" id="setup-box">
+    <div class="brand"><div class="brand-icon">D</div><div class="brand-name">Dove Gel Packs</div></div>
+    <h1>Create Admin Account</h1>
+    <p>First-time setup. Choose your admin username and password. You'll use these to log in every time.</p>
+    <div id="setup-err" class="err hidden"></div>
+    <div class="field"><label>Username</label><input id="su-user" placeholder="e.g. admin" autocomplete="username"/></div>
+    <div class="field"><label>Password <small style="font-weight:400">(min 6 chars)</small></label><input type="password" id="su-pass" placeholder="Choose a strong password" autocomplete="new-password"/></div>
+    <div class="field"><label>Confirm Password</label><input type="password" id="su-pass2" placeholder="Repeat password" autocomplete="new-password"/></div>
+    <button class="btn btn-primary btn-full" onclick="doSetup()" style="margin-top:6px">Create Account &amp; Sign In →</button>
+  </div>
+
+  <!-- login box shown when admin exists -->
+  <div class="auth-card hidden" id="login-box">
+    <div class="brand"><div class="brand-icon">D</div><div class="brand-name">Dove Gel Packs</div></div>
+    <h1>Admin Login</h1>
+    <p>Enter your credentials to access the content manager.</p>
+    <div id="login-err" class="err hidden"></div>
+    <div class="field"><label>Username</label><input id="lg-user" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="field"><label>Password</label><input type="password" id="lg-pass" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()" style="margin-top:6px">Sign In →</button>
+  </div>
+</div>
+
+<!-- ── Main app ─────────────────────────────────────────────────────── -->
+<div id="app" class="hidden">
+  <div id="sidebar">
+    <div class="sb-head">
+      <div class="sb-icon">D</div>
+      <div><div class="sb-title">Dove Admin</div><div class="sb-sub">Content Manager</div></div>
+    </div>
+    <nav>
+      <div class="nav-group">Content</div>
+      <button class="nav-btn on" data-p="dashboard" onclick="go('dashboard',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </button>
+      <button class="nav-btn" data-p="site" onclick="go('site',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Site Settings
+      </button>
+      <button class="nav-btn" data-p="hero" onclick="go('hero',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Hero Section
+      </button>
+      <button class="nav-btn" data-p="about" onclick="go('about',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        About Page
+      </button>
+      <button class="nav-btn" data-p="products" onclick="go('products',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Products Page
+      </button>
+      <button class="nav-btn" data-p="applications" onclick="go('applications',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Applications Page
+      </button>
+      <button class="nav-btn" data-p="home_sections" onclick="go('home_sections',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home Sections
+      </button>
+      <button class="nav-btn" data-p="contact" onclick="go('contact',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.55 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Contact Page
+      </button>
+      <button class="nav-btn" data-p="arrays" onclick="go('arrays',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Lists &amp; Arrays
+      </button>
+      <div class="nav-group">Products</div>
+      <button class="nav-btn" data-p="home_products" onclick="go('home_products',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Home Products
+      </button>
+      <button class="nav-btn" data-p="catalogue" onclick="go('catalogue',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        Product Catalogue
+      </button>
+      <button class="nav-btn" data-p="applications_list" onclick="go('applications_list',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Applications List
+      </button>
+      <div class="nav-group">Lists</div>
+      <button class="nav-btn" data-p="testimonials" onclick="go('testimonials',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Testimonials
+      </button>
+      <button class="nav-btn" data-p="faqs" onclick="go('faqs',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        FAQs
+      </button>
+      <button class="nav-btn" data-p="home_apps" onclick="go('home_apps',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="15" x2="13" y2="15"/></svg>
+        Home App Cards
+      </button>
+      <button class="nav-btn" data-p="milestones" onclick="go('milestones',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Milestones
+      </button>
+      <div class="nav-group">Account</div>
+      <button class="nav-btn" data-p="account" onclick="go('account',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        My Account
+      </button>
+    </nav>
+    <div class="sb-foot">
+      <a href="/" target="_blank" class="btn btn-ghost btn-sm" style="width:100%;margin-bottom:6px;justify-content:center">↗ View Site</a>
+      <button class="btn btn-ghost btn-sm" style="width:100%;justify-content:center" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div id="main-area">
+    <div class="top-bar">
+      <h1 id="page-title">Dashboard</h1>
+      <span id="top-right" style="font-size:.75rem;color:var(--muted)"></span>
+    </div>
+    <div class="page-body" id="page-body"></div>
+  </div>
+</div>
+
+<!-- Modal container -->
+<div class="overlay hidden" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-head"><h3 id="modal-title"></h3><button onclick="closeModal()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem">✕</button></div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer modal-foot" id="modal-foot"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const API = '/api';
+let TOKEN = localStorage.getItem('dove_token') || '';
+
+// ── API helpers ───────────────────────────────────────────────────────────────
+async function req(url, opts = {}) {
+  const headers = { 'Content-Type': 'application/json', ...(TOKEN ? { 'X-Auth-Token': TOKEN } : {}), ...(opts.headers || {}) };
+  const res = await fetch(API + url, { ...opts, headers, body: opts.body ? (typeof opts.body === 'string' ? opts.body : JSON.stringify(opts.body)) : undefined });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+  return data;
+}
+const GET  = url       => req(url);
+const POST = (url, b)  => req(url, { method: 'POST', body: b });
+const PUT  = (url, b)  => req(url, { method: 'PUT',  body: b });
+const DEL  = url       => req(url, { method: 'DELETE' });
+
+// ── Image upload ──────────────────────────────────────────────────────────────
+async function uploadImage(file) {
+  const fd = new FormData(); fd.append('file', file);
+  const res = await fetch(API + '/upload.php', { method: 'POST', headers: { 'X-Auth-Token': TOKEN }, body: fd });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Upload failed');
+  return data.url;
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function toast(msg, type = 'ok') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+function openModal(title, body, foot) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').innerHTML = body;
+  document.getElementById('modal-foot').innerHTML = foot;
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+function closeModal() { document.getElementById('modal-overlay').classList.add('hidden'); }
+
+// ── Auth ──────────────────────────────────────────────────────────────────────
+async function initAuth() {
+  const { needs_setup } = await GET('/auth.php?action=status');
+  document.getElementById('auth').classList.remove('hidden'); // keep visible until validated
+  if (needs_setup) {
+    document.getElementById('setup-box').classList.remove('hidden');
+  } else {
+    // If we have a stored token, try to validate it first
+    if (TOKEN) {
+      try {
+        const { ok } = await GET('/auth.php?action=validate');
+        if (ok) { showApp(); return; }
+      } catch (_) {}
+      TOKEN = '';
+      localStorage.removeItem('dove_token');
+    }
+    document.getElementById('login-box').classList.remove('hidden');
+  }
+}
+
+async function doSetup() {
+  const u = document.getElementById('su-user').value.trim();
+  const p = document.getElementById('su-pass').value;
+  const p2 = document.getElementById('su-pass2').value;
+  const errEl = document.getElementById('setup-err');
+  errEl.classList.add('hidden');
+  if (p !== p2) { errEl.textContent = 'Passwords do not match.'; errEl.classList.remove('hidden'); return; }
+  try {
+    const data = await POST('/auth.php?action=setup', { username: u, password: p });
+    TOKEN = data.token;
+    localStorage.setItem('dove_token', TOKEN);
+    showApp();
+  } catch(e) { errEl.textContent = e.message; errEl.classList.remove('hidden'); }
+}
+
+async function doLogin() {
+  const u = document.getElementById('lg-user').value.trim();
+  const p = document.getElementById('lg-pass').value;
+  const errEl = document.getElementById('login-err');
+  errEl.classList.add('hidden');
+  try {
+    const data = await POST('/auth.php?action=login', { username: u, password: p });
+    TOKEN = data.token;
+    localStorage.setItem('dove_token', TOKEN);
+    showApp();
+  } catch(e) { errEl.textContent = e.message; errEl.classList.remove('hidden'); }
+}
+
+async function doLogout() {
+  try { await POST('/auth.php?action=logout', {}); } catch(_) {}
+  TOKEN = '';
+  localStorage.removeItem('dove_token');
+  location.reload();
+}
+
+function showApp() {
+  document.getElementById('auth').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  go('dashboard', document.querySelector('[data-p="dashboard"]'));
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+const PAGE_TITLES = { dashboard:'Dashboard', site:'Site Settings', hero:'Hero Section', about:'About Page', products:'Products Page', applications:'Applications Page', home_sections:'Home Sections', contact:'Contact Page', arrays:'Lists & Arrays', home_products:'Home Products', catalogue:'Product Catalogue', applications_list:'Applications', testimonials:'Testimonials', faqs:'FAQs', home_apps:'Home App Cards', milestones:'Milestones', account:'My Account' };
+
+function go(page, btn) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  document.getElementById('page-title').textContent = PAGE_TITLES[page] || page;
+  const pb = document.getElementById('page-body');
+  pb.innerHTML = '';
+  PAGES[page] && PAGES[page](pb);
+}
+
+// ── Settings helpers ──────────────────────────────────────────────────────────
+function fld(id, label, val, type = 'text', rows = 0, span2 = false) {
+  const cls = span2 ? 'field span2' : 'field';
+  const input = rows
+    ? `<textarea id="${id}" rows="${rows}">${esc(val)}</textarea>`
+    : `<input type="${type}" id="${id}" value="${esc(val)}"/>`;
+  return `<div class="${cls}"><label>${label}</label>${input}</div>`;
+}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function gv(id) { const e = document.getElementById(id); return e ? e.value : ''; }
+
+async function loadSettings(keys) {
+  const data = await GET('/content.php');
+  const s = data.settings || {};
+  return keys.reduce((m,k) => { m[k] = s[k] || ''; return m; }, {});
+}
+async function saveSettings(keys) {
+  const body = {};
+  keys.forEach(k => body[k] = gv(k));
+  await POST('/content.php', body);
+  toast('Saved!');
+}
+
+// ── Upload widget ─────────────────────────────────────────────────────────────
+function uploadWidget(prefix, label, current) {
+  return `<div class="field span2">
+    <label>${label}</label>
+    <div class="upload-zone" id="uz-${prefix}" onclick="document.getElementById('uf-${prefix}').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event,'${prefix}')">
+      <input type="file" id="uf-${prefix}" accept="image/*" onchange="handleUpload('${prefix}',this)"/>
+      ${current ? `<img id="uprev-${prefix}" src="${esc(current)}"/>` : `<img id="uprev-${prefix}" style="display:none"/>`}
+      <small>Click or drag image here (JPG, PNG, WebP — max 8MB)</small>
+    </div>
+    <input type="text" id="uval-${prefix}" placeholder="Or paste URL directly" value="${esc(current)}" oninput="syncPreview('${prefix}')"/>
+  </div>`;
+}
+function syncPreview(prefix) {
+  const url = gv('uval-' + prefix);
+  const img = document.getElementById('uprev-' + prefix);
+  if (img) { img.src = url; img.style.display = url ? 'block' : 'none'; }
+}
+function handleDrop(e, prefix) { e.preventDefault(); e.currentTarget.classList.remove('drag'); const f = e.dataTransfer.files[0]; if(f) handleFileUpload(prefix, f); }
+async function handleUpload(prefix, inp) { if (inp.files[0]) await handleFileUpload(prefix, inp.files[0]); }
+async function handleFileUpload(prefix, file) {
+  try {
+    const url = await uploadImage(file);
+    const val = document.getElementById('uval-' + prefix);
+    if (val) val.value = url;
+    syncPreview(prefix);
+    toast('Image uploaded!');
+  } catch(e) { toast(e.message, 'err'); }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PAGE DEFINITIONS
+// ═══════════════════════════════════════════════════════════════════════════════
+const PAGES = {
+
+// ── Dashboard ─────────────────────────────────────────────────────────────────
+dashboard: async (c) => {
+  const data = await GET('/content.php').catch(() => ({}));
+  const s = data.settings || {};
+  c.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px">
+      ${[['Site Name', s.site_name || 'Dove Gel Packs'], ['Products', (data.home_products||[]).length], ['Testimonials', (data.testimonials||[]).length], ['FAQs', (data.faqs||[]).length]].map(([l,v])=>`
+      <div class="card" style="margin:0"><div class="card-body">
+        <div style="color:var(--muted);font-size:.7rem;text-transform:uppercase;font-weight:700;margin-bottom:4px">${l}</div>
+        <div style="font-size:1.5rem;font-weight:800;color:#fff">${v}</div>
+      </div></div>`).join('')}
+    </div>
+    <div class="card"><div class="card-head"><h2>Quick Access</h2></div><div class="card-body">
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        ${Object.entries(PAGE_TITLES).filter(([k])=>k!=='dashboard').map(([k,v])=>`<button class="btn btn-ghost btn-sm" onclick="go('${k}',document.querySelector('[data-p=${k}]'))">${v}</button>`).join('')}
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>How to use</h2></div><div class="card-body" style="color:var(--muted);font-size:.825rem;line-height:1.7">
+      <p>• Changes save <strong style="color:var(--text)">instantly</strong> — no publish button needed.</p>
+      <p>• Upload product photos via <strong style="color:var(--text)">Home Products</strong> or <strong style="color:var(--text)">Product Catalogue</strong>.</p>
+      <p>• Change your password any time via <strong style="color:var(--text)">My Account</strong>.</p>
+    </div></div>`;
+},
+
+// ── Site Settings ─────────────────────────────────────────────────────────────
+site: async (c) => {
+  const s = await loadSettings(['logo_url','site_name','tagline','email','phone','phone_href','address','footer_tagline','whatsapp_number','whatsapp_channel','facebook_url','instagram_url','linkedin_url','nav_btn_quote','footer_brand_name','footer_quick_links_title','footer_products_title','footer_contact_title','footer_whatsapp_label','footer_rights']);
+  const KEYS = Object.keys(s);
+  c.innerHTML = `
+    <div class="card"><div class="card-head"><h2>Logo</h2></div><div class="card-body">
+      <div class="grid2">${uploadWidget('logo','Site Logo',s.logo_url)}</div>
+      <button class="btn btn-primary btn-sm" onclick="saveLogoSetting()" style="margin-top:10px">Save Logo</button>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Basic Info</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('site_name','Site Name',s.site_name)}
+        ${fld('tagline','Tagline',s.tagline)}
+        ${fld('email','Email',s.email,'email')}
+        ${fld('phone','Phone (display)',s.phone)}
+        ${fld('phone_href','Phone Link (tel:...)',s.phone_href)}
+        ${fld('address','Address / Service Area',s.address)}
+        ${fld('footer_tagline','Footer Tagline',s.footer_tagline,'text',2,true)}
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="saveSettings(['site_name','tagline','email','phone','phone_href','address','footer_tagline'])" style="margin-top:10px">Save</button>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Social &amp; WhatsApp</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('whatsapp_number','WhatsApp Direct Link',s.whatsapp_number)}
+        ${fld('whatsapp_channel','WhatsApp Channel Link',s.whatsapp_channel)}
+        ${fld('facebook_url','Facebook URL',s.facebook_url)}
+        ${fld('instagram_url','Instagram URL',s.instagram_url)}
+        ${fld('linkedin_url','LinkedIn URL',s.linkedin_url)}
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="saveSettings(['whatsapp_number','whatsapp_channel','facebook_url','instagram_url','linkedin_url'])" style="margin-top:10px">Save</button>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Navbar &amp; Footer Text</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('nav_btn_quote','Navbar CTA Button',s.nav_btn_quote)}
+        ${fld('footer_brand_name','Footer Brand Name',s.footer_brand_name)}
+        ${fld('footer_quick_links_title','Footer: Quick Links Title',s.footer_quick_links_title)}
+        ${fld('footer_products_title','Footer: Products Title',s.footer_products_title)}
+        ${fld('footer_contact_title','Footer: Contact Title',s.footer_contact_title)}
+        ${fld('footer_whatsapp_label','Footer: WhatsApp Label',s.footer_whatsapp_label)}
+        ${fld('footer_rights','Footer: Copyright Text',s.footer_rights)}
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="saveSettings(['nav_btn_quote','footer_brand_name','footer_quick_links_title','footer_products_title','footer_contact_title','footer_whatsapp_label','footer_rights'])" style="margin-top:10px">Save</button>
+    </div></div>`;
+
+  window.saveLogoSetting = async () => {
+    const url = gv('uval-logo') || gv('logo_url');
+    await POST('/content.php', { logo_url: url });
+    toast('Logo saved!');
+  };
+},
+
+// ── Hero ──────────────────────────────────────────────────────────────────────
+hero: async (c) => {
+  const s = await loadSettings(['hero_badge_text','hero_headline_line1','hero_headline_line2','hero_headline_line3','hero_headline_line4','hero_subheadline','hero_btn_products_text','hero_btn_whatsapp_text','hero_cta_headline','hero_cta_sub','hero_cta_btn_whatsapp','hero_cta_btn_quote']);
+  c.innerHTML = `
+    <div class="card"><div class="card-head"><h2>Hero Section</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('hero_badge_text','Badge Text',s.hero_badge_text,'text',0,true)}
+        ${fld('hero_headline_line1','Headline Line 1',s.hero_headline_line1)}
+        ${fld('hero_headline_line2','Headline Line 2 (gradient)',s.hero_headline_line2)}
+        ${fld('hero_headline_line3','Headline Line 3',s.hero_headline_line3)}
+        ${fld('hero_headline_line4','Headline Line 4 (gradient)',s.hero_headline_line4)}
+        ${fld('hero_subheadline','Subheadline (HTML allowed)',s.hero_subheadline,'text',3,true)}
+        ${fld('hero_btn_products_text','Products Button',s.hero_btn_products_text)}
+        ${fld('hero_btn_whatsapp_text','WhatsApp Button',s.hero_btn_whatsapp_text)}
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>CTA Section</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('hero_cta_headline','CTA Headline',s.hero_cta_headline,'text',0,true)}
+        ${fld('hero_cta_sub','CTA Subtext',s.hero_cta_sub,'text',0,true)}
+        ${fld('hero_cta_btn_whatsapp','WhatsApp Button',s.hero_cta_btn_whatsapp)}
+        ${fld('hero_cta_btn_quote','Quote Button',s.hero_cta_btn_quote)}
+      </div>
+    </div></div>
+    <button class="btn btn-primary" onclick="saveSettings(['hero_badge_text','hero_headline_line1','hero_headline_line2','hero_headline_line3','hero_headline_line4','hero_subheadline','hero_btn_products_text','hero_btn_whatsapp_text','hero_cta_headline','hero_cta_sub','hero_cta_btn_whatsapp','hero_cta_btn_quote'])" style="margin-bottom:20px">Save Hero</button>`;
+},
+
+// ── About ─────────────────────────────────────────────────────────────────────
+about: async (c) => {
+  const s = await loadSettings(['about_hero_title_line1','about_hero_title_line2','about_hero_title_line3','about_hero_sub','about_hero_badge','about_story_title','about_story_badge','about_values_title','about_values_badge','about_features_title','about_features_sub','about_features_badge','about_cta_headline','about_cta_sub','about_intro_title','about_intro_highlight','about_intro_p1','about_intro_p2','about_btn_products','about_btn_contact','about_cta_btn_contact','about_cta_btn_products']);
+  c.innerHTML = `
+    <div class="card"><div class="card-head"><h2>Hero</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('about_hero_badge','Hero Badge',s.about_hero_badge)}
+        ${fld('about_hero_title_line1','Title Line 1',s.about_hero_title_line1)}
+        ${fld('about_hero_title_line2','Title Line 2 (gradient)',s.about_hero_title_line2)}
+        ${fld('about_hero_title_line3','Title Line 3',s.about_hero_title_line3)}
+        ${fld('about_hero_sub','Hero Subtext',s.about_hero_sub,'text',3,true)}
+        ${fld('about_btn_products','Button: View Products',s.about_btn_products)}
+        ${fld('about_btn_contact','Button: Contact Us',s.about_btn_contact)}
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Home Page Intro</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('about_intro_title','Title',s.about_intro_title)}
+        ${fld('about_intro_highlight','Highlight (gradient)',s.about_intro_highlight)}
+        ${fld('about_intro_p1','Paragraph 1',s.about_intro_p1,'text',3,true)}
+        ${fld('about_intro_p2','Paragraph 2',s.about_intro_p2,'text',3,true)}
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Section Titles &amp; Badges</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('about_story_badge','Story Badge',s.about_story_badge)}
+        ${fld('about_story_title','Story Title',s.about_story_title)}
+        ${fld('about_values_badge','Values Badge',s.about_values_badge)}
+        ${fld('about_values_title','Values Title',s.about_values_title)}
+        ${fld('about_features_badge','Features Badge',s.about_features_badge)}
+        ${fld('about_features_title','Features Title',s.about_features_title)}
+        ${fld('about_features_sub','Features Subtext',s.about_features_sub,'text',0,true)}
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>CTA Section</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('about_cta_headline','CTA Headline',s.about_cta_headline)}
+        ${fld('about_cta_sub','CTA Subtext',s.about_cta_sub)}
+        ${fld('about_cta_btn_contact','Button: Get in Touch',s.about_cta_btn_contact)}
+        ${fld('about_cta_btn_products','Button: View Products',s.about_cta_btn_products)}
+      </div>
+    </div></div>
+    <button class="btn btn-primary" onclick="saveSettings(['about_hero_badge','about_hero_title_line1','about_hero_title_line2','about_hero_title_line3','about_hero_sub','about_btn_products','about_btn_contact','about_intro_title','about_intro_highlight','about_intro_p1','about_intro_p2','about_story_badge','about_story_title','about_values_badge','about_values_title','about_features_badge','about_features_title','about_features_sub','about_cta_headline','about_cta_sub','about_cta_btn_contact','about_cta_btn_products'])" style="margin-bottom:20px">Save About Page</button>`;
+},
+
+// ── Contact ───────────────────────────────────────────────────────────────────
+contact: async (c) => {
+  const keys = ['contact_hero_badge','contact_hero_title_line1','contact_hero_title_line2','contact_hero_sub','contact_help_items',
+    'contact_service_area_label','contact_service_area_value','contact_response_time_label','contact_response_time_value',
+    'contact_whatsapp_card_title','contact_whatsapp_card_sub','contact_help_heading',
+    'contact_form_title','contact_form_sub','contact_form_name_label','contact_form_email_label','contact_form_company_label',
+    'contact_form_phone_label','contact_form_subject_label','contact_form_message_label',
+    'contact_form_name_ph','contact_form_email_ph','contact_form_company_ph','contact_form_phone_ph','contact_form_message_ph',
+    'contact_form_subjects','contact_form_btn_sending','contact_form_btn_sent','contact_form_btn_send','contact_form_success_msg',
+    'contact_faq_title_line1','contact_faq_title_line2','contact_cta_text','contact_cta_btn'];
+  const s = await loadSettings(keys);
+  let helpItems = [];
+  try { helpItems = JSON.parse(s.contact_help_items || '[]'); } catch(_) {}
+  let subjects = [];
+  try { subjects = JSON.parse(s.contact_form_subjects || '[]'); } catch(_) {}
+  c.innerHTML = `
+    <div class="card"><div class="card-head"><h2>Hero</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('contact_hero_badge','Hero Badge',s.contact_hero_badge)}
+        ${fld('contact_hero_title_line1','Title Line 1',s.contact_hero_title_line1)}
+        ${fld('contact_hero_title_line2','Title Line 2 (gradient)',s.contact_hero_title_line2)}
+        ${fld('contact_hero_sub','Hero Subtext',s.contact_hero_sub,'text',2,true)}
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Contact Info Cards</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('contact_service_area_label','Service Area Label',s.contact_service_area_label)}
+        ${fld('contact_service_area_value','Service Area Value',s.contact_service_area_value)}
+        ${fld('contact_response_time_label','Response Time Label',s.contact_response_time_label)}
+        ${fld('contact_response_time_value','Response Time Value',s.contact_response_time_value)}
+        ${fld('contact_whatsapp_card_title','WhatsApp Card Title',s.contact_whatsapp_card_title)}
+        ${fld('contact_whatsapp_card_sub','WhatsApp Card Subtitle',s.contact_whatsapp_card_sub)}
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Help Section</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('contact_help_heading','Help Heading',s.contact_help_heading)}
+        <div class="field span2"><label>Help Items (one per line)</label><textarea id="contact_help_items_raw" rows="6">${helpItems.join('\n')}</textarea></div>
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Contact Form</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('contact_form_title','Form Title',s.contact_form_title)}
+        ${fld('contact_form_sub','Form Subtitle',s.contact_form_sub)}
+        ${fld('contact_form_name_label','Name Label',s.contact_form_name_label)}
+        ${fld('contact_form_email_label','Email Label',s.contact_form_email_label)}
+        ${fld('contact_form_company_label','Company Label',s.contact_form_company_label)}
+        ${fld('contact_form_phone_label','Phone Label',s.contact_form_phone_label)}
+        ${fld('contact_form_subject_label','Subject Label',s.contact_form_subject_label)}
+        ${fld('contact_form_message_label','Message Label',s.contact_form_message_label)}
+        ${fld('contact_form_name_ph','Name Placeholder',s.contact_form_name_ph)}
+        ${fld('contact_form_email_ph','Email Placeholder',s.contact_form_email_ph)}
+        ${fld('contact_form_company_ph','Company Placeholder',s.contact_form_company_ph)}
+        ${fld('contact_form_phone_ph','Phone Placeholder',s.contact_form_phone_ph)}
+        ${fld('contact_form_message_ph','Message Placeholder',s.contact_form_message_ph,'text',2,true)}
+        ${fld('contact_form_btn_send','Send Button',s.contact_form_btn_send)}
+        ${fld('contact_form_btn_sending','Sending State',s.contact_form_btn_sending)}
+        ${fld('contact_form_btn_sent','Sent State',s.contact_form_btn_sent)}
+        ${fld('contact_form_success_msg','Success Message',s.contact_form_success_msg,'text',2,true)}
+      </div>
+      <div class="field span2" style="margin-top:12px"><label>Subject Dropdown Options (one per line, format: Label|value)</label><textarea id="contact_form_subjects_raw" rows="6">${subjects.map(s=>s.label+'|'+s.value).join('\n')}</textarea></div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>FAQ &amp; CTA</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('contact_faq_title_line1','FAQ Title Line 1',s.contact_faq_title_line1)}
+        ${fld('contact_faq_title_line2','FAQ Title Line 2 (gradient)',s.contact_faq_title_line2)}
+        ${fld('contact_cta_text','CTA Text',s.contact_cta_text)}
+        ${fld('contact_cta_btn','CTA Button',s.contact_cta_btn)}
+      </div>
+    </div></div>
+    <button class="btn btn-primary" onclick="saveContact()" style="margin-bottom:20px">Save Contact Page</button>`;
+  window.saveContact = async () => {
+    const raw = gv('contact_help_items_raw').split('\n').map(l=>l.trim()).filter(Boolean);
+    const subs = gv('contact_form_subjects_raw').split('\n').map(l=>{const i=l.indexOf('|');return i>0?{label:l.slice(0,i),value:l.slice(i+1)}:null}).filter(Boolean);
+    await POST('/content.php', {
+      contact_hero_badge:gv('contact_hero_badge'), contact_hero_title_line1:gv('contact_hero_title_line1'), contact_hero_title_line2:gv('contact_hero_title_line2'), contact_hero_sub:gv('contact_hero_sub'),
+      contact_service_area_label:gv('contact_service_area_label'), contact_service_area_value:gv('contact_service_area_value'),
+      contact_response_time_label:gv('contact_response_time_label'), contact_response_time_value:gv('contact_response_time_value'),
+      contact_whatsapp_card_title:gv('contact_whatsapp_card_title'), contact_whatsapp_card_sub:gv('contact_whatsapp_card_sub'),
+      contact_help_heading:gv('contact_help_heading'),
+      contact_form_title:gv('contact_form_title'), contact_form_sub:gv('contact_form_sub'),
+      contact_form_name_label:gv('contact_form_name_label'), contact_form_email_label:gv('contact_form_email_label'),
+      contact_form_company_label:gv('contact_form_company_label'), contact_form_phone_label:gv('contact_form_phone_label'),
+      contact_form_subject_label:gv('contact_form_subject_label'), contact_form_message_label:gv('contact_form_message_label'),
+      contact_form_name_ph:gv('contact_form_name_ph'), contact_form_email_ph:gv('contact_form_email_ph'),
+      contact_form_company_ph:gv('contact_form_company_ph'), contact_form_phone_ph:gv('contact_form_phone_ph'),
+      contact_form_message_ph:gv('contact_form_message_ph'),
+      contact_form_btn_sending:gv('contact_form_btn_sending'), contact_form_btn_sent:gv('contact_form_btn_sent'),
+      contact_form_btn_send:gv('contact_form_btn_send'), contact_form_success_msg:gv('contact_form_success_msg'),
+      contact_faq_title_line1:gv('contact_faq_title_line1'), contact_faq_title_line2:gv('contact_faq_title_line2'),
+      contact_cta_text:gv('contact_cta_text'), contact_cta_btn:gv('contact_cta_btn'),
+      contact_help_items:JSON.stringify(raw), contact_form_subjects:JSON.stringify(subs)
+    });
+    toast('Saved!');
+  };
+},
+
+// ── Products Page ─────────────────────────────────────────────────────────────
+products: async (c) => {
+  const keys = ['products_hero_badge','products_hero_title_line1','products_hero_title_line2','products_hero_sub','products_btn_whatsapp','products_btn_quote','products_strip_title'];
+  const s = await loadSettings(keys);
+  c.innerHTML = `
+    <div class="card"><div class="card-head"><h2>Hero</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('products_hero_badge','Hero Badge',s.products_hero_badge)}
+        ${fld('products_hero_title_line1','Title Line 1',s.products_hero_title_line1)}
+        ${fld('products_hero_title_line2','Title Line 2 (gradient)',s.products_hero_title_line2)}
+        ${fld('products_hero_sub','Hero Subtitle',s.products_hero_sub,'text',2,true)}
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Buttons &amp; Strip</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('products_btn_whatsapp','WhatsApp Button',s.products_btn_whatsapp)}
+        ${fld('products_btn_quote','Quote Button',s.products_btn_quote)}
+        ${fld('products_strip_title','Strip Title',s.products_strip_title)}
+      </div>
+    </div></div>
+    <button class="btn btn-primary" onclick="saveSettings(${JSON.stringify(keys)})" style="margin-bottom:20px">Save Products Page</button>`;
+},
+
+// ── Applications Page ──────────────────────────────────────────────────────────
+applications: async (c) => {
+  const keys = ['applications_hero_badge','applications_hero_title_line1','applications_hero_title_line2','applications_hero_sub','applications_cta_headline','applications_cta_sub','applications_cta_btn_contact','applications_cta_btn_products'];
+  const s = await loadSettings(keys);
+  c.innerHTML = `
+    <div class="card"><div class="card-head"><h2>Hero</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('applications_hero_badge','Hero Badge',s.applications_hero_badge)}
+        ${fld('applications_hero_title_line1','Title Line 1',s.applications_hero_title_line1)}
+        ${fld('applications_hero_title_line2','Title Line 2 (gradient)',s.applications_hero_title_line2)}
+        ${fld('applications_hero_sub','Hero Subtitle',s.applications_hero_sub,'text',2,true)}
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>CTA Section</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('applications_cta_headline','CTA Headline',s.applications_cta_headline)}
+        ${fld('applications_cta_sub','CTA Subtext',s.applications_cta_sub,'text',2,true)}
+        ${fld('applications_cta_btn_contact','Contact Button',s.applications_cta_btn_contact)}
+        ${fld('applications_cta_btn_products','Products Button',s.applications_cta_btn_products)}
+      </div>
+    </div></div>
+    <button class="btn btn-primary" onclick="saveSettings(${JSON.stringify(keys)})" style="margin-bottom:20px">Save Applications Page</button>`;
+},
+
+// ── Home Sections ─────────────────────────────────────────────────────────────
+home_sections: async (c) => {
+  const keys = ['home_about_badge','home_products_badge','home_products_title_line1','home_products_title_line2','home_products_sub','home_products_btn','home_applications_badge','home_applications_title_line1','home_applications_title_line2','home_applications_sub','home_applications_btn','home_testimonials_badge','home_testimonials_title_line1','home_testimonials_title_line2','home_cta_title_highlight'];
+  const s = await loadSettings(keys);
+  c.innerHTML = `
+    <div class="card"><div class="card-head"><h2>About Section</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('home_about_badge','About Badge',s.home_about_badge)}
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Products Section</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('home_products_badge','Badge',s.home_products_badge)}
+        ${fld('home_products_title_line1','Title Line 1',s.home_products_title_line1)}
+        ${fld('home_products_title_line2','Title Line 2 (gradient)',s.home_products_title_line2)}
+        ${fld('home_products_sub','Subtitle',s.home_products_sub,'text',2,true)}
+        ${fld('home_products_btn','Button Text',s.home_products_btn)}
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Applications Section</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('home_applications_badge','Badge',s.home_applications_badge)}
+        ${fld('home_applications_title_line1','Title Line 1',s.home_applications_title_line1)}
+        ${fld('home_applications_title_line2','Title Line 2 (gradient)',s.home_applications_title_line2)}
+        ${fld('home_applications_sub','Subtitle',s.home_applications_sub,'text',2,true)}
+        ${fld('home_applications_btn','Button Text',s.home_applications_btn)}
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Testimonials Section</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('home_testimonials_badge','Badge',s.home_testimonials_badge)}
+        ${fld('home_testimonials_title_line1','Title Line 1',s.home_testimonials_title_line1)}
+        ${fld('home_testimonials_title_line2','Title Line 2 (gradient)',s.home_testimonials_title_line2)}
+      </div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>CTA Section</h2></div><div class="card-body">
+      <div class="grid2">
+        ${fld('home_cta_title_highlight','CTA Highlight Word',s.home_cta_title_highlight)}
+      </div>
+    </div></div>
+    <button class="btn btn-primary" onclick="saveSettings(${JSON.stringify(keys)})" style="margin-bottom:20px">Save Home Sections</button>`;
+},
+
+// ── Arrays / Lists ─────────────────────────────────────────────────────────────
+arrays: async (c) => {
+  const keys = ['stats','big_stats','services','about_snippets','about_stats','values','features','certifications'];
+  const s = await loadSettings(keys);
+  const parse = (k,fb) => { try { const p=JSON.parse(s[k]||'[]'); return Array.isArray(p)?p:fb; } catch(_) { return fb; } };
+  const stats = parse('stats',[]);
+  const bigStats = parse('big_stats',[]);
+  const services = parse('services',[]);
+  const snippets = parse('about_snippets',[]);
+  const aboutStats = parse('about_stats',[]);
+  const values = parse('values',[]);
+  const features = parse('features',[]);
+  const certs = parse('certifications',[]);
+  c.innerHTML = `
+    <div class="card"><div class="card-head"><h2>Hero Stats</h2><span class="hint">Format: value|label</span></div><div class="card-body">
+      <div class="field span2"><label>Stats (one per line)</label><textarea id="stats_raw" rows="6">${stats.map(s=>s.value+'|'+s.label).join('\n')}</textarea></div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Big Stats</h2><span class="hint">Format: value|label|sub</span></div><div class="card-body">
+      <div class="field span2"><label>Big Stats (one per line)</label><textarea id="big_stats_raw" rows="6">${bigStats.map(s=>s.value+'|'+s.label+'|'+(s.sub||'')).join('\n')}</textarea></div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Services</h2><span class="hint">Format: icon|title|desc</span></div><div class="card-body">
+      <div class="field span2"><label>Services (one per line)</label><textarea id="services_raw" rows="6">${services.map(s=>s.icon+'|'+s.title+'|'+s.desc).join('\n')}</textarea></div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>About Snippets</h2><span class="hint">Format: icon|title|desc</span></div><div class="card-body">
+      <div class="field span2"><label>About Snippets (one per line)</label><textarea id="about_snippets_raw" rows="6">${snippets.map(s=>s.icon+'|'+s.title+'|'+s.desc).join('\n')}</textarea></div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>About Stats</h2><span class="hint">Format: value|label</span></div><div class="card-body">
+      <div class="field span2"><label>About Stats (one per line)</label><textarea id="about_stats_raw" rows="6">${aboutStats.map(s=>s.value+'|'+s.label).join('\n')}</textarea></div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Values</h2><span class="hint">Format: icon|title|desc</span></div><div class="card-body">
+      <div class="field span2"><label>Values (one per line)</label><textarea id="values_raw" rows="6">${values.map(s=>s.icon+'|'+s.title+'|'+s.desc).join('\n')}</textarea></div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Features</h2><span class="hint">Format: icon|title|desc</span></div><div class="card-body">
+      <div class="field span2"><label>Features (one per line)</label><textarea id="features_raw" rows="6">${features.map(s=>s.icon+'|'+s.title+'|'+s.desc).join('\n')}</textarea></div>
+    </div></div>
+    <div class="card"><div class="card-head"><h2>Certifications</h2><span class="hint">Format: icon|title|desc</span></div><div class="card-body">
+      <div class="field span2"><label>Certifications (one per line)</label><textarea id="certifications_raw" rows="6">${certs.map(s=>s.icon+'|'+s.title+'|'+s.desc).join('\n')}</textarea></div>
+    </div></div>
+    <button class="btn btn-primary" onclick="saveArrays()" style="margin-bottom:20px">Save All Lists</button>`;
+  window.saveArrays = async () => {
+    const parse2 = (id, cols) => gv(id).split('\n').map(l => {
+      const parts = l.split('|');
+      if (cols === 2) return { value: parts[0]||'', label: parts[1]||'' };
+      if (cols === 3) return { icon: parts[0]||'', title: parts[1]||'', desc: parts[2]||'' };
+      return {};
+    }).filter(l => Object.values(l).some(v => v.trim()));
+    const bigStatsRaw = gv('big_stats_raw').split('\n').map(l => {
+      const parts = l.split('|');
+      return { value: parts[0]||'', label: parts[1]||'', sub: parts[2]||'' };
+    }).filter(l => Object.values(l).some(v => v.trim()));
+    await POST('/content.php', {
+      stats: JSON.stringify(parse2('stats_raw',2)),
+      big_stats: JSON.stringify(bigStatsRaw),
+      services: JSON.stringify(parse2('services_raw',3)),
+      about_snippets: JSON.stringify(parse2('about_snippets_raw',3)),
+      about_stats: JSON.stringify(parse2('about_stats_raw',2)),
+      values: JSON.stringify(parse2('values_raw',3)),
+      features: JSON.stringify(parse2('features_raw',3)),
+      certifications: JSON.stringify(parse2('certifications_raw',3))
+    });
+    toast('Saved!');
+  };
+},
+
+// ── Home Products ─────────────────────────────────────────────────────────────
+home_products: async (c) => {
+  const render = async () => {
+    const items = await GET('/items.php?resource=home_products');
+    c.innerHTML = `<div class="card"><div class="card-head"><h2>Home Products</h2><button class="btn btn-primary btn-sm" onclick="hpAdd()">+ Add</button></div><div class="card-body">
+      <div class="item-list">${items.map(p=>`
+        <div class="item">
+          ${p.image ? `<img src="${esc(p.image)}" style="width:56px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0"/>` : `<div style="width:56px;height:40px;background:var(--s2);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.3rem">${p.icon||'🧊'}</div>`}
+          <div class="item-body"><div class="item-title">${esc(p.name)} <span style="font-size:.7rem;color:var(--accent)">${esc(p.tag)}</span></div><div class="item-meta">${esc(p.sizes)}</div></div>
+          <div class="item-actions">
+            <button class="btn btn-ghost btn-sm" onclick="hpEdit(${p.id})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="hpDel(${p.id})">Del</button>
+          </div>
+        </div>`).join('') || '<p style="color:var(--muted)">No products yet.</p>'}
+      </div>
+    </div></div>`;
+  };
+
+  function hpModal(p) {
+    openModal(p ? 'Edit Product' : 'New Product',
+      `<div class="grid2">
+        ${uploadWidget('hp','Product Photo', p?.image||'')}
+        ${fld('hp-name','Name',p?.name||'')}
+        ${fld('hp-icon','Emoji Icon',p?.icon||'🧊')}
+        ${fld('hp-tag','Tag Label',p?.tag||'')}
+        ${fld('hp-sizes','Sizes',p?.sizes||'')}
+        ${fld('hp-sort','Sort Order',p?.sort_order||0,'number')}
+        ${fld('hp-desc','Description',p?.description||'','text',3,true)}
+      </div>`,
+      `<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+       <button class="btn btn-primary" onclick="hpSave(${p?.id||'null'})">Save</button>`
+    );
+  }
+
+  window.hpAdd = () => hpModal(null);
+  window.hpEdit = async (id) => { const items = await GET('/items.php?resource=home_products'); hpModal(items.find(i=>i.id===id)); };
+  window.hpDel  = async (id) => { if(!confirm('Delete?'))return; await DEL('/items.php?resource=home_products&id='+id); toast('Deleted'); render(); };
+  window.hpSave = async (id) => {
+    const image = gv('uval-hp') || gv('hp-image') || '';
+    const body = { name:gv('hp-name'), icon:gv('hp-icon'), tag:gv('hp-tag'), sizes:gv('hp-sizes'), description:gv('hp-desc'), image, sort_order:parseInt(gv('hp-sort'))||0 };
+    try {
+      if (id) await PUT('/items.php?resource=home_products&id='+id, body);
+      else    await POST('/items.php?resource=home_products', body);
+      closeModal(); toast('Saved!'); render();
+    } catch(e) { toast(e.message,'err'); }
+  };
+
+  render();
+},
+
+// ── Product Catalogue ─────────────────────────────────────────────────────────
+catalogue: async (c) => {
+  const render = async () => {
+    const data = await GET('/content.php');
+    const cats = data.product_categories || [];
+    c.innerHTML = `<div class="card"><div class="card-head"><h2>Product Categories &amp; Variants</h2></div><div class="card-body">
+      <div class="item-list">
+        ${cats.map(cat=>`
+        <div style="background:var(--s2);border:1px solid var(--b);border-radius:10px;overflow:hidden">
+          <div style="padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid var(--b)">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="dot" style="background:${cat.accent_from}"></span>
+              <strong style="color:#fff;font-size:.825rem">${esc(cat.label)} — ${esc(cat.title)}</strong>
+            </div>
+            <div class="item-actions">
+              <button class="btn btn-ghost btn-sm" onclick="catEdit('${cat.id}')">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="catDel('${cat.id}')">Del</button>
+            </div>
+          </div>
+          <div style="padding:10px 14px">
+            <div style="font-size:.7rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Variants</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+              ${(cat.variants||[]).map(v=>`
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:var(--bg);border:1px solid var(--b);border-radius:999px;font-size:.75rem;color:var(--text)">
+                ${v.image?`<img src="${esc(v.image)}" style="width:16px;height:16px;border-radius:3px;object-fit:cover"/>`:''}
+                ${esc(v.name)}
+                <button onclick="varEdit(${v.id},'${cat.id}')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:.7rem">edit</button>
+                <button onclick="varDel(${v.id})" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:.7rem">✕</button>
+              </span>`).join('')}
+              <button class="btn btn-ghost btn-sm" onclick="varAdd('${cat.id}')">+ Variant</button>
+            </div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div></div>`;
+  };
+
+  function catModal(cat) {
+    const specs = cat ? (cat.specs||[]).join('\n') : '';
+    openModal(cat ? 'Edit Category' : 'New Category',
+      `<div class="grid2">
+        ${fld('cat-id','ID (slug, no spaces)',cat?.id||'')}
+        ${fld('cat-label','Tab Label',cat?.label||'')}
+        ${fld('cat-title','Page Title',cat?.title||'')}
+        ${fld('cat-desc','Description',cat?.description||'','text',3,true)}
+        <div class="field"><label>Accent From</label><input type="color" id="cat-af" value="${cat?.accent_from||'#1e7ec8'}" style="height:40px;cursor:pointer"/></div>
+        <div class="field"><label>Accent To</label><input type="color" id="cat-at" value="${cat?.accent_to||'#0db2e8'}" style="height:40px;cursor:pointer"/></div>
+        <div class="field span2"><label>Spec Pills (one per line)</label><textarea id="cat-specs" rows="4">${esc(specs)}</textarea></div>
+        ${fld('cat-sort','Sort Order',cat?.sort_order||0,'number')}
+      </div>`,
+      `<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+       <button class="btn btn-primary" onclick="catSave('${cat?.id||''}')">Save</button>`
+    );
+  }
+
+  window.catEdit = (id) => { const cats = []; GET('/content.php').then(d => catModal((d.product_categories||[]).find(c=>c.id===id))); };
+  window.catEdit = async (id) => { const d = await GET('/content.php'); catModal((d.product_categories||[]).find(c=>c.id===id)); };
+  window.catDel  = async (id) => { if(!confirm('Delete category and all variants?'))return; await POST('/products.php',{action:'delete_category',id}); toast('Deleted'); render(); };
+  window.catSave = async (oldId) => {
+    const id = gv('cat-id').trim().toLowerCase().replace(/\s+/g,'-');
+    const specs = gv('cat-specs').split('\n').map(l=>l.trim()).filter(Boolean);
+    const body = { action:'save_category', id, label:gv('cat-label'), title:gv('cat-title'), description:gv('cat-desc'), accent_from:gv('cat-af'), accent_to:gv('cat-at'), specs, sort_order:parseInt(gv('cat-sort'))||0 };
+    try { await POST('/products.php', body); closeModal(); toast('Saved!'); render(); } catch(e) { toast(e.message,'err'); }
+  };
+
+  function varModal(v, catId) {
+    openModal(v?.id ? 'Edit Variant' : 'New Variant',
+      `<input type="hidden" id="var-catid" value="${catId}"/>
+       <div class="grid2">
+         ${fld('var-name','Variant Name',v?.name||'')}
+         ${fld('var-sort','Sort Order',v?.sort_order||0,'number')}
+         ${uploadWidget('var','Image (optional)',v?.image||'')}
+       </div>`,
+      `<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+       <button class="btn btn-primary" onclick="varSave(${v?.id||'null'})">Save</button>`
+    );
+  }
+  window.varAdd  = (catId) => varModal(null, catId);
+  window.varEdit = async (id, catId) => { const d = await GET('/content.php'); const cat = (d.product_categories||[]).find(c=>c.id===catId); varModal((cat?.variants||[]).find(v=>v.id===id), catId); };
+  window.varDel  = async (id) => { if(!confirm('Delete variant?'))return; await POST('/products.php',{action:'delete_variant',id}); toast('Deleted'); render(); };
+  window.varSave = async (id) => {
+    const image = gv('uval-var') || '';
+    const body = { action:'save_variant', id:id||0, category_id:gv('var-catid'), name:gv('var-name'), image, sort_order:parseInt(gv('var-sort'))||0 };
+    try { await POST('/products.php', body); closeModal(); toast('Saved!'); render(); } catch(e) { toast(e.message,'err'); }
+  };
+
+  render();
+},
+
+// ── Applications List ──────────────────────────────────────────────────────────
+applications_list: async (c) => {
+  const render = async () => {
+    const data = await GET('/content.php');
+    const apps = data.applications || [];
+    c.innerHTML = `<div class="card"><div class="card-head"><h2>Applications</h2><button class="btn btn-primary btn-sm" onclick="appAdd()">+ Add</button></div><div class="card-body">
+      <div class="item-list">${apps.map(a=>`
+        <div class="item">
+          ${a.img?`<img src="${esc(a.img)}" style="width:60px;height:42px;object-fit:cover;border-radius:6px;flex-shrink:0"/>`:''}
+          <div class="item-body"><div class="item-title">${esc(a.title)} <span style="font-size:.7rem;color:var(--accent)">${esc(a.tag)}</span></div><div class="item-meta">${esc((a.description||'').substring(0,80))}</div></div>
+          <div class="item-actions">
+            <button class="btn btn-ghost btn-sm" onclick="appEdit(${a.id})">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="appDel(${a.id})">Del</button>
+          </div>
+        </div>`).join('')||'<p style="color:var(--muted)">No applications yet.</p>'}
+      </div></div></div>`;
+  };
+
+  function appModal(a) {
+    openModal(a?'Edit Application':'New Application',
+      `<div class="grid2">
+        ${fld('app-title','Title',a?.title||'')}
+        ${fld('app-tag','Tag (e.g. Healthcare)',a?.tag||'')}
+        ${fld('app-desc','Description',a?.description||'','text',3,true)}
+        ${uploadWidget('app','Image',a?.img||'')}
+        <div class="field span2"><label>Details (one per line)</label><textarea id="app-details" rows="4">${esc((a?.details||[]).join('\n'))}</textarea></div>
+        ${fld('app-sort','Sort Order',a?.sort_order||0,'number')}
+      </div>`,
+      `<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+       <button class="btn btn-primary" onclick="appSave(${a?.id||'null'})">Save</button>`
+    );
+  }
+  window.appAdd  = () => appModal(null);
+  window.appEdit = async (id) => { const d = await GET('/content.php'); appModal((d.applications||[]).find(a=>a.id===id)); };
+  window.appDel  = async (id) => { if(!confirm('Delete?'))return; await POST('/products.php',{action:'delete_application',id}); toast('Deleted'); render(); };
+  window.appSave = async (id) => {
+    const img = gv('uval-app') || '';
+    const details = gv('app-details').split('\n').map(l=>l.trim()).filter(Boolean);
+    const body = { action:'save_application', id:id||0, title:gv('app-title'), tag:gv('app-tag'), description:gv('app-desc'), img, details, sort_order:parseInt(gv('app-sort'))||0 };
+    try { await POST('/products.php', body); closeModal(); toast('Saved!'); render(); } catch(e) { toast(e.message,'err'); }
+  };
+
+  render();
+},
+
+// ── Testimonials ──────────────────────────────────────────────────────────────
+testimonials: (c) => genericList(c, 'testimonials', 'Testimonials',
+  (t, onEdit, onDel) => `<div class="item"><div class="item-body"><div class="item-title">${esc(t.name)} <span style="color:var(--warn)">★${t.rating}</span></div><div class="item-meta">${esc(t.role)}\n"${esc((t.text||'').substring(0,80))}..."</div></div><div class="item-actions"><button class="btn btn-ghost btn-sm" onclick="${onEdit}">Edit</button><button class="btn btn-danger btn-sm" onclick="${onDel}">Del</button></div></div>`,
+  (t) => `<div class="grid2">
+    ${fld('gf-name','Client Name',t?.name||'')}
+    ${fld('gf-role','Role / Company',t?.role||'')}
+    ${fld('gf-rating','Rating (1–5)',t?.rating||5,'number')}
+    ${fld('gf-sort','Sort Order',t?.sort_order||0,'number')}
+    ${fld('gf-text','Quote',t?.text||'','text',4,true)}
+  </div>`,
+  () => ({ name:gv('gf-name'), role:gv('gf-role'), rating:parseInt(gv('gf-rating'))||5, text:gv('gf-text'), sort_order:parseInt(gv('gf-sort'))||0 })
+),
+
+// ── FAQs ──────────────────────────────────────────────────────────────────────
+faqs: (c) => genericList(c, 'faqs', 'FAQs',
+  (f, onEdit, onDel) => `<div class="item"><div class="item-body"><div class="item-title">${esc(f.question)}</div><div class="item-meta">${esc((f.answer||'').substring(0,100))}</div></div><div class="item-actions"><button class="btn btn-ghost btn-sm" onclick="${onEdit}">Edit</button><button class="btn btn-danger btn-sm" onclick="${onDel}">Del</button></div></div>`,
+  (f) => `<div class="grid2">
+    ${fld('gf-question','Question',f?.question||'')}
+    ${fld('gf-sort','Sort Order',f?.sort_order||0,'number')}
+    ${fld('gf-answer','Answer',f?.answer||'','text',4,true)}
+  </div>`,
+  () => ({ question:gv('gf-question'), answer:gv('gf-answer'), sort_order:parseInt(gv('gf-sort'))||0 })
+),
+
+// ── Home App Cards ─────────────────────────────────────────────────────────────
+home_apps: (c) => genericList(c, 'home_applications', 'Home Application Cards',
+  (a, onEdit, onDel) => `<div class="item"><div style="font-size:1.5rem;flex-shrink:0">${a.icon}</div><div class="item-body"><div class="item-title">${esc(a.title)}</div><div class="item-meta">${esc(a.description)}</div></div><div class="item-actions"><button class="btn btn-ghost btn-sm" onclick="${onEdit}">Edit</button><button class="btn btn-danger btn-sm" onclick="${onDel}">Del</button></div></div>`,
+  (a) => `<div class="grid2">
+    ${fld('gf-title','Title',a?.title||'')}
+    ${fld('gf-icon','Emoji',a?.icon||'🧊')}
+    ${fld('gf-sort','Sort Order',a?.sort_order||0,'number')}
+    ${fld('gf-desc','Description',a?.description||'')}
+  </div>`,
+  () => ({ title:gv('gf-title'), icon:gv('gf-icon'), description:gv('gf-desc'), sort_order:parseInt(gv('gf-sort'))||0 })
+),
+
+// ── Milestones ────────────────────────────────────────────────────────────────
+milestones: (c) => genericList(c, 'milestones', 'Milestones',
+  (m, onEdit, onDel) => `<div class="item"><div style="min-width:3rem;font-weight:700;color:var(--accent)">${esc(m.year)}</div><div class="item-body"><div class="item-title">${esc(m.title)}</div><div class="item-meta">${esc(m.description)}</div></div><div class="item-actions"><button class="btn btn-ghost btn-sm" onclick="${onEdit}">Edit</button><button class="btn btn-danger btn-sm" onclick="${onDel}">Del</button></div></div>`,
+  (m) => `<div class="grid2">
+    ${fld('gf-year','Year',m?.year||'')}
+    ${fld('gf-title','Title',m?.title||'')}
+    ${fld('gf-sort','Sort Order',m?.sort_order||0,'number')}
+    ${fld('gf-desc','Description',m?.description||'','text',3,true)}
+  </div>`,
+  () => ({ year:gv('gf-year'), title:gv('gf-title'), description:gv('gf-desc'), sort_order:parseInt(gv('gf-sort'))||0 })
+),
+
+// ── Account ───────────────────────────────────────────────────────────────────
+account: (c) => {
+  c.innerHTML = `<div class="card" style="max-width:400px"><div class="card-head"><h2>Change Password</h2></div><div class="card-body">
+    <div id="pw-msg"></div>
+    ${fld('pw-old','Current Password','','password')}
+    ${fld('pw-new','New Password','','password')}
+    ${fld('pw-new2','Confirm New Password','','password')}
+    <button class="btn btn-primary" onclick="changePassword()" style="margin-top:6px">Update Password</button>
+  </div></div>`;
+  window.changePassword = async () => {
+    const msg = document.getElementById('pw-msg');
+    const o = gv('pw-old'), n = gv('pw-new'), n2 = gv('pw-new2');
+    if (n !== n2) { msg.innerHTML = '<div class="err">Passwords do not match</div>'; return; }
+    try {
+      await POST('/auth.php?action=change_password', { old_password: o, new_password: n });
+      msg.innerHTML = '<div class="ok-msg">Password updated!</div>';
+      document.getElementById('pw-old').value = document.getElementById('pw-new').value = document.getElementById('pw-new2').value = '';
+    } catch(e) { msg.innerHTML = `<div class="err">${e.message}</div>`; }
+  };
+},
+
+};
+
+// ── Generic list CRUD ─────────────────────────────────────────────────────────
+function genericList(c, resource, title, rowHTML, formHTML, getBody) {
+  const render = async () => {
+    const items = await GET('/items.php?resource=' + resource);
+    c.innerHTML = `<div class="card"><div class="card-head"><h2>${title}</h2><button class="btn btn-primary btn-sm" onclick="glAdd()">+ Add</button></div><div class="card-body">
+      <div class="item-list">${items.map((it,idx)=>rowHTML(it, `glEdit(${it.id})`, `glDel(${it.id})`)).join('')||`<p style="color:var(--muted)">No items yet.</p>`}
+      </div></div></div>`;
+  };
+
+  window.glAdd = () => {
+    openModal('New ' + title.replace(/s$/,''), formHTML(null),
+      `<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+       <button class="btn btn-primary" onclick="glSave(null)">Create</button>`);
+  };
+  window.glEdit = async (id) => {
+    const items = await GET('/items.php?resource=' + resource);
+    const item = items.find(i => i.id === id);
+    openModal('Edit ' + title.replace(/s$/,''), formHTML(item),
+      `<button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+       <button class="btn btn-primary" onclick="glSave(${id})">Save</button>`);
+  };
+  window.glDel = async (id) => {
+    if (!confirm('Delete?')) return;
+    await DEL('/items.php?resource=' + resource + '&id=' + id);
+    toast('Deleted'); render();
+  };
+  window.glSave = async (id) => {
+    const body = getBody();
+    try {
+      if (id) await PUT('/items.php?resource=' + resource + '&id=' + id, body);
+      else    await POST('/items.php?resource=' + resource, body);
+      closeModal(); toast('Saved!'); render();
+    } catch(e) { toast(e.message, 'err'); }
+  };
+
+  render();
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+initAuth();
+</script>
+</body>
+</html>
