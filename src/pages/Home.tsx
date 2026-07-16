@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronDown, Shield, Zap, RotateCcw, Timer, Droplets, Award, Thermometer, Star, Quote, Image as ImageIcon, CheckCircle2, Globe, Users, Leaf } from 'lucide-react';
 import MagicRings from '../components/MagicRings';
-import productImg from '../assets/images/PHOTO-2026-07-16-20-33-03.jpg';
+import ProductImage from '../components/ProductImage';
 import { useContent } from '../context/ContentContext';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -191,13 +191,9 @@ export function Home() {
               style={{ background: 'radial-gradient(ellipse, rgba(30,100,220,0.22), transparent 70%)' }}
             />
 
-            {/* Product image — mix-blend-mode:screen removes the dark gray bg, white product stays pristine */}
-            <img
-              src={productImg}
-              alt="Dove Ice Gel Pack"
+            {/* Product image — dark gray background removed via canvas keying, original colors preserved */}
+            <ProductImage
               className="relative z-[1] w-full h-auto select-none"
-              style={{ mixBlendMode: 'screen' }}
-              draggable={false}
             />
           </div>
         </div>
