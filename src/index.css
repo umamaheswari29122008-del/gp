@@ -905,3 +905,40 @@ h1, h2, h3, h4, h5, h6 {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+/* Hero product floating animation */
+@keyframes hero-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-18px) rotate(0.8deg);
+  }
+}
+
+.hero-float {
+  animation: hero-float 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Ambient glow behind hero product */
+@keyframes hero-glow-pulse {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+.hero-glow {
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(30, 100, 200, 0.35) 0%, rgba(0, 60, 140, 0.12) 40%, transparent 70%);
+  animation: hero-glow-pulse 5s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+

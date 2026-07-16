@@ -148,11 +148,15 @@ export function Home() {
           style={{ background: 'linear-gradient(to bottom, transparent, #030c1e)' }} />
 
         {/* Floating product video — right side of hero, background removed via chroma key */}
-        <div className={`absolute right-0 top-0 bottom-0 w-full lg:w-[48%] z-[2] flex items-center justify-center pointer-events-none transition-all duration-1000 ${loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
-          <div className="relative" style={{ width: 'min(520px, 85vw)' }}>
+        <div className={`absolute right-0 top-0 bottom-0 w-full lg:w-[50%] z-[2] flex items-center justify-center pointer-events-none transition-all duration-1000 ${loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
+          <div className="relative hero-float" style={{ width: 'min(560px, 88vw)' }}>
+            {/* Ambient glow behind product */}
+            <div className="absolute inset-0 -z-10 flex items-center justify-center">
+              <div className="hero-glow" />
+            </div>
             {/* Soft shadow beneath product for depth */}
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3/4 h-10 rounded-full blur-3xl z-[0]"
-              style={{ background: 'radial-gradient(ellipse, rgba(0,100,200,0.20), transparent 70%)' }} />
+            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-2/3 h-12 rounded-full blur-3xl z-[0]"
+              style={{ background: 'radial-gradient(ellipse, rgba(0,100,200,0.25), transparent 70%)' }} />
             <ChromaKeyVideo
               webmSrc="/videos/gel-pack.webm"
               mp4Src="/videos/gel-pack-optimized.mp4"
