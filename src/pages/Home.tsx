@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronDown, Shield, Zap, RotateCcw, Timer, Droplets, Award, Thermometer, Star, Quote, Image as ImageIcon, CheckCircle2, Globe, Users, Leaf } from 'lucide-react';
 import MagicRings from '../components/MagicRings';
+import ChromaKeyVideo from '../components/ChromaKeyVideo';
 import { useContent } from '../context/ContentContext';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -146,34 +147,18 @@ export function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-36 z-[1] pointer-events-none"
           style={{ background: 'linear-gradient(to bottom, transparent, #030c1e)' }} />
 
-        {/* Floating product video — right side of hero */}
-        <div className={`absolute right-0 top-0 bottom-0 w-full lg:w-[45%] z-[2] flex items-center justify-center pointer-events-none transition-all duration-1000 ${loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
-          <div className="relative" style={{ width: 'min(420px, 80vw)', aspectRatio: '1 / 1' }}>
-            {/* Radial gradient mask to blend video edges into navy background */}
-            <div className="absolute inset-0 z-[3] pointer-events-none"
-              style={{
-                WebkitMaskImage: 'radial-gradient(circle, black 55%, transparent 78%)',
-                maskImage: 'radial-gradient(circle, black 55%, transparent 78%)',
-                background: '#030c1e',
-              }} />
-            {/* Soft shadow beneath video for depth */}
-            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-3/4 h-8 rounded-full blur-2xl z-[1]"
-              style={{ background: 'radial-gradient(ellipse, rgba(0,100,200,0.25), transparent 70%)' }} />
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
+        {/* Floating product video — right side of hero, background removed via chroma key */}
+        <div className={`absolute right-0 top-0 bottom-0 w-full lg:w-[48%] z-[2] flex items-center justify-center pointer-events-none transition-all duration-1000 ${loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
+          <div className="relative" style={{ width: 'min(520px, 85vw)' }}>
+            {/* Soft shadow beneath product for depth */}
+            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3/4 h-10 rounded-full blur-3xl z-[0]"
+              style={{ background: 'radial-gradient(ellipse, rgba(0,100,200,0.20), transparent 70%)' }} />
+            <ChromaKeyVideo
+              webmSrc="/videos/gel-pack.webm"
+              mp4Src="/videos/gel-pack-optimized.mp4"
               poster="/videos/gel-pack-poster.jpg"
-              className="relative z-[2] w-full h-full object-cover rounded-2xl"
-              style={{
-                WebkitMaskImage: 'radial-gradient(circle, black 52%, transparent 75%)',
-                maskImage: 'radial-gradient(circle, black 52%, transparent 75%)',
-              }}
-            >
-              <source src="/videos/gel-pack.webm" type="video/webm" />
-              <source src="/videos/gel-pack-optimized.mp4" type="video/mp4" />
-            </video>
+              className="relative z-[1] w-full h-auto"
+            />
           </div>
         </div>
 
