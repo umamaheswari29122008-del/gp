@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronDown, Shield, Zap, RotateCcw, Timer, Droplets, Award, Thermometer, Star, Quote, Image as ImageIcon, CheckCircle2, Globe, Users, Leaf } from 'lucide-react';
 import MagicRings from '../components/MagicRings';
-import ChromaKeyVideo from '../components/ChromaKeyVideo';
+import productImg from '../assets/images/PHOTO-2026-07-16-20-33-03.jpg';
 import { useContent } from '../context/ContentContext';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -147,21 +147,57 @@ export function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-36 z-[1] pointer-events-none"
           style={{ background: 'linear-gradient(to bottom, transparent, #030c1e)' }} />
 
-        {/* Floating product video — right side of hero, background removed via chroma key */}
-        <div className={`absolute right-0 top-0 bottom-0 w-full lg:w-[50%] z-[2] flex items-center justify-center pointer-events-none transition-all duration-1000 ${loaded ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
-          <div className="relative hero-float" style={{ width: 'min(560px, 88vw)' }}>
-            {/* Ambient glow behind product */}
-            <div className="absolute inset-0 -z-10 flex items-center justify-center">
+        {/* Product — right side of hero */}
+        <div className={`absolute right-0 top-0 bottom-0 w-full lg:w-[50%] z-[2] flex items-center justify-center pointer-events-none transition-all duration-1200 ${loaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+          <div className="relative hero-float" style={{ width: 'min(520px, 82vw)' }}>
+
+            {/* Bubbles */}
+            {[
+              { size: 9,  top: '8%',  left: '18%', delay: '0s',   dur: '6.2s' },
+              { size: 6,  top: '14%', left: '72%', delay: '1.1s', dur: '5.4s' },
+              { size: 13, top: '22%', left: '5%',  delay: '0.4s', dur: '7.8s' },
+              { size: 7,  top: '38%', left: '88%', delay: '2.3s', dur: '6s'   },
+              { size: 5,  top: '55%', left: '12%', delay: '1.7s', dur: '5s'   },
+              { size: 10, top: '60%', left: '80%', delay: '0.9s', dur: '8.1s' },
+              { size: 8,  top: '72%', left: '30%', delay: '3s',   dur: '6.6s' },
+              { size: 5,  top: '78%', left: '65%', delay: '1.5s', dur: '5.7s' },
+              { size: 12, top: '85%', left: '48%', delay: '2.8s', dur: '7.2s' },
+              { size: 6,  top: '90%', left: '10%', delay: '0.2s', dur: '6.9s' },
+              { size: 4,  top: '48%', left: '95%', delay: '3.5s', dur: '5.2s' },
+              { size: 9,  top: '30%', left: '58%', delay: '2.1s', dur: '8.4s' },
+            ].map((b, i) => (
+              <span
+                key={i}
+                className="bubble"
+                style={{
+                  width: b.size,
+                  height: b.size,
+                  top: b.top,
+                  left: b.left,
+                  ['--dur' as string]: b.dur,
+                  ['--delay' as string]: b.delay,
+                }}
+              />
+            ))}
+
+            {/* Ambient glow */}
+            <div className="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none">
               <div className="hero-glow" />
             </div>
-            {/* Soft shadow beneath product for depth */}
-            <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-2/3 h-12 rounded-full blur-3xl z-[0]"
-              style={{ background: 'radial-gradient(ellipse, rgba(0,100,200,0.25), transparent 70%)' }} />
-            <ChromaKeyVideo
-              webmSrc="/videos/gel-pack.webm"
-              mp4Src="/videos/gel-pack-optimized.mp4"
-              poster="/videos/gel-pack-poster.jpg"
-              className="relative z-[1] w-full h-auto"
+
+            {/* Soft ground shadow */}
+            <div
+              className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-3/5 h-10 blur-3xl rounded-full -z-10"
+              style={{ background: 'radial-gradient(ellipse, rgba(30,100,220,0.22), transparent 70%)' }}
+            />
+
+            {/* Product image — mix-blend-mode:screen removes the dark gray bg, white product stays pristine */}
+            <img
+              src={productImg}
+              alt="Dove Ice Gel Pack"
+              className="relative z-[1] w-full h-auto select-none"
+              style={{ mixBlendMode: 'screen' }}
+              draggable={false}
             />
           </div>
         </div>
