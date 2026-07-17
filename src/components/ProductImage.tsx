@@ -19,8 +19,7 @@ export default function ProductImage({ className, style }: Props) {
       const ctx = canvas.getContext('2d', { willReadFrequently: true });
       if (!ctx) return;
 
-      // Draw full image first to sample colours accurately
-      canvas.width = img.width;
+      canvas.width  = img.width;
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
 
@@ -29,29 +28,26 @@ export default function ProductImage({ className, style }: Props) {
       const fw = img.width;
       const fh = img.height;
 
-      // ── 1. Find the first row from top that is NOT white/near-white ──
-      // The white text banner sits at the very top; skip it completely.
+      // ── 1. Detect top white-banner boundary ──
+      // Walk down until >5% of the row is non-white
       let firstProductRow = 0;
       for (let y = 0; y < fh; y++) {
-        let nonWhiteCount = 0;
+        let nonWhite = 0;
         for (let x = 0; x < fw; x++) {
           const i = (y * fw + x) * 4;
-          const r = fd[i], g = fd[i + 1], b = fd[i + 2];
-          // white/near-white: all channels > 200
-          if (r < 200 || g < 200 || b < 200) nonWhiteCount++;
+          if (fd[i] < 210 || fd[i + 1] < 210 || fd[i + 2] < 210) nonWhite++;
         }
-        // once > 5% of the row is non-white we've hit the real product area
-        if (nonWhiteCount > fw * 0.05) { firstProductRow = y; break; }
+        if (nonWhite > fw * 0.05) { firstProductRow = y; break; }
       }
 
-      // Also crop a small strip from each side to remove edge compression artifacts
+      // Crop a small strip from each side too
       const cropSide = Math.floor(fw * 0.03);
       const srcX = cropSide;
       const srcY = firstProductRow;
       const srcW = fw - cropSide * 2;
       const srcH = fh - srcY;
 
-      canvas.width = srcW;
+      canvas.width  = srcW;
       canvas.height = srcH;
       ctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, srcW, srcH);
 
@@ -60,8 +56,8 @@ export default function ProductImage({ className, style }: Props) {
       const w = srcW;
       const h = srcH;
 
-      // ── 2. Sample background colour from all four corners ──
-      const pad = 30;
+      // ── 2. Sample background colour from corner patches ──
+      const pad = 28;
       let sr = 0, sg = 0, sb = 0, sc = 0;
       for (let px = 0; px < pad; px++) {
         for (let py = 0; py < pad; py++) {
@@ -76,58 +72,84 @@ export default function ProductImage({ className, style }: Props) {
       }
       const bgR = sr / sc, bgG = sg / sc, bgB = sb / sc;
 
-      // ── 3. Build alpha mask — colour-distance keying ──
-      const alpha = new Uint8Array(w * h);
-      // High tolerance to capture all the carpet-grey and border fringe
-      const tolerance = 90;
-      const feather = 30;
+      // ── 3. Flood-fill from all edges ──
+      // Only pixels REACHABLE from the border that also match the background
+      // colour are marked transparent.  Interior product pixels are untouched
+      // even if they happen to share a similar hue.
+      const BG_TOLERANCE = 80; // how close a pixel must be to bg colour to be erased
+      const visited = new Uint8Array(w * h); // 0=unvisited, 1=bg, 2=product
 
-      for (let idx = 0, i = 0; idx < w * h; idx++, i += 4) {
-        const r = d[i], g = d[i + 1], b = d[i + 2];
+      const colorDist = (i: number): number => {
+        const dr = d[i] - bgR, dg = d[i + 1] - bgG, db = d[i + 2] - bgB;
+        return Math.sqrt(dr * dr + dg * dg + db * db);
+      };
 
-        // Also erase near-white border pixels (leftover from white title bar)
-        const isNearWhite = r > 210 && g > 210 && b > 210;
-        if (isNearWhite) { alpha[idx] = 0; continue; }
+      // BFS queue (flat index)
+      const queue: number[] = [];
 
-        const dr = r - bgR, dg = g - bgG, db = b - bgB;
-        const dist = Math.sqrt(dr * dr + dg * dg + db * db);
-        if (dist < tolerance) {
-          alpha[idx] = 0;
-        } else if (dist < tolerance + feather) {
-          alpha[idx] = Math.round(((dist - tolerance) / feather) * 255);
+      // Seed: push every edge pixel that matches background
+      const seed = (x: number, y: number) => {
+        const idx = y * w + x;
+        if (visited[idx]) return;
+        if (colorDist(idx * 4) < BG_TOLERANCE) {
+          visited[idx] = 1; // background
+          queue.push(idx);
         } else {
-          alpha[idx] = 255;
+          visited[idx] = 2; // product edge hit
+        }
+      };
+
+      for (let x = 0; x < w; x++) { seed(x, 0); seed(x, h - 1); }
+      for (let y = 0; y < h; y++) { seed(0, y); seed(w - 1, y); }
+
+      // BFS expand
+      let qi = 0;
+      while (qi < queue.length) {
+        const idx = queue[qi++];
+        const x = idx % w;
+        const y = (idx - x) / w;
+        const neighbors: [number, number][] = [
+          [x - 1, y], [x + 1, y], [x, y - 1], [x, y + 1],
+        ];
+        for (const [nx, ny] of neighbors) {
+          if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
+          const nidx = ny * w + nx;
+          if (visited[nidx]) continue;
+          if (colorDist(nidx * 4) < BG_TOLERANCE) {
+            visited[nidx] = 1;
+            queue.push(nidx);
+          } else {
+            visited[nidx] = 2;
+          }
         }
       }
 
-      // ── 4. Multi-pass erosion — kill isolated dust specks ──
-      // Run twice with increasing neighbourhood thresholds
-      const erode = (src: Uint8Array, radius: number, threshold: number): Uint8Array => {
-        const out = new Uint8Array(src);
-        for (let y = 0; y < h; y++) {
-          for (let x = 0; x < w; x++) {
-            const idx = y * w + x;
-            if (src[idx] === 0) continue;
-            let sum = 0, cnt = 0;
-            for (let dy = -radius; dy <= radius; dy++) {
-              for (let dx = -radius; dx <= radius; dx++) {
-                const nx = x + dx, ny = y + dy;
-                if (nx < 0 || nx >= w || ny < 0 || ny >= h) continue;
-                sum += src[ny * w + nx]; cnt++;
-              }
-            }
-            if (sum / cnt < threshold) out[idx] = 0;
-          }
+      // ── 4. Build alpha mask ──
+      // Background pixels → 0. Unvisited interior pixels → 255 (fully opaque).
+      // Apply soft feathering at the transition edge (1-pixel neighbours of bg).
+      const alpha = new Uint8Array(w * h);
+      for (let idx = 0; idx < w * h; idx++) {
+        alpha[idx] = visited[idx] === 1 ? 0 : 255;
+      }
+
+      // Feather: any product pixel adjacent to a bg pixel gets 160 alpha
+      // to avoid a hard cut-out edge
+      for (let y = 1; y < h - 1; y++) {
+        for (let x = 1; x < w - 1; x++) {
+          const idx = y * w + x;
+          if (visited[idx] !== 2) continue;
+          const hasAdjacentBg =
+            visited[(y - 1) * w + x] === 1 ||
+            visited[(y + 1) * w + x] === 1 ||
+            visited[y * w + (x - 1)] === 1 ||
+            visited[y * w + (x + 1)] === 1;
+          if (hasAdjacentBg) alpha[idx] = 200;
         }
-        return out;
-      };
+      }
 
-      let mask = erode(alpha, 2, 80);   // first pass: tight radius
-      mask    = erode(mask,  3, 50);    // second pass: wider, cleans lingering dots
-
-      // ── 5. Apply mask ──
+      // ── 5. Apply alpha — colours untouched ──
       for (let idx = 0, i = 0; idx < w * h; idx++, i += 4) {
-        d[i + 3] = mask[idx];
+        d[i + 3] = alpha[idx];
       }
 
       ctx.putImageData(imageData, 0, 0);
