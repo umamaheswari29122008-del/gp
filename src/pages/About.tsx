@@ -31,13 +31,13 @@ export function About() {
         <div className="absolute inset-0 pointer-events-none opacity-[0.022]"
           style={{ backgroundImage: 'linear-gradient(rgba(56,201,247,1) 1px, transparent 1px), linear-gradient(90deg, rgba(56,201,247,1) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
         <div className="max-w-4xl mx-auto px-6 text-center section-reveal">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-ice-400 text-xs font-semibold mb-5">{about_page.hero_badge}</div>
-          <h1 className="font-display text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-ice-400 text-xs font-semibold mb-7 sm:mb-5">{about_page.hero_badge}</div>
+          <h1 className="font-display text-[2.5rem] sm:text-5xl lg:text-7xl font-bold text-white mb-8 sm:mb-6 leading-[1.12] lg:leading-tight">
             {about_page.hero_title_line1}<br />
             <span className="gradient-text">{about_page.hero_title_line2}</span>{' '}
             {about_page.hero_title_line3}
           </h1>
-          <p className="text-ice-100/68 text-xl leading-relaxed max-w-2xl mx-auto mb-8">{about_page.hero_sub}</p>
+          <p className="text-ice-100/68 text-base sm:text-xl leading-relaxed max-w-xl sm:max-w-2xl mx-auto mb-8">{about_page.hero_sub}</p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link to="/products" className="glow-button inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-ice-500 text-white font-bold text-sm shadow-lg shadow-ice-500/30 hover:bg-ice-400 transition-colors">
               {about_page.btn_products} <ArrowRight className="w-4 h-4" />
