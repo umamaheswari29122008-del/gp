@@ -173,6 +173,7 @@ interface GelPackProps {
   floatIntensity?: number;
   floatSpeed?: number;
   wobble?: boolean;
+  float?: boolean;
 }
 
 function GelPack({
@@ -182,6 +183,7 @@ function GelPack({
   floatIntensity = 0.3,
   floatSpeed = 1.6,
   wobble = true,
+  float = true,
 }: GelPackProps) {
   const innerRef = useRef<THREE.Mesh>(null);
   const colorMap = useMemo(buildGelTexture, []);
@@ -197,7 +199,7 @@ function GelPack({
 
   return (
     <group position={position} rotation={rotation} scale={[scale, scale, scale]}>
-      <Float speed={floatSpeed} rotationIntensity={0.07} floatIntensity={floatIntensity}>
+      <Float speed={floatSpeed} rotationIntensity={0.07} floatIntensity={float ? floatIntensity : 0}>
         {/* Outer shell */}
         <RoundedBox ref={innerRef} args={[3.9, 2.45, 0.46]} radius={0.11} smoothness={8} castShadow>
           <meshPhysicalMaterial
@@ -373,6 +375,7 @@ function SceneInner({ mousePos, compact }: SceneInnerProps) {
         floatIntensity={0.32}
         floatSpeed={1.6}
         wobble
+        float={!compact}
       />
 
       {!compact && (
