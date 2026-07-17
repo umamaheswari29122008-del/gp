@@ -128,7 +128,7 @@ const D: SiteContent = {
   hero: {
     badge_text: '20+ Years of Cooling Innovation • Made in India',
     headline_line1: 'Superior', headline_line2: 'Cooling.',
-    headline_line3: 'Engineered', headline_line4: 'for Excellence.',
+    headline_line3: 'Engineered', headline_line4: 'For Excellence.',
     subheadline: 'DOVE Ice Gel Packs are independently lab-tested, non-toxic, and stay cold up to <strong class="text-ice-300">65% longer</strong> than regular ice.',
     btn_products_text: 'View Products', btn_whatsapp_text: 'Buy on WhatsApp',
     cta_headline: 'Ready to Keep Your Products Perfectly Cold?',
