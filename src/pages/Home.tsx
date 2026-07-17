@@ -148,7 +148,7 @@ export function Home() {
           style={{ background: 'linear-gradient(to bottom, transparent, #030c1e)' }} />
 
         {/* Product — right side of hero */}
-        <div className={`absolute right-0 top-0 bottom-0 w-full lg:w-[50%] z-[2] flex items-center justify-center pointer-events-none transition-all duration-1200 ${loaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+        <div className={`absolute right-0 top-0 bottom-0 w-full lg:w-[50%] z-[2] hidden lg:flex items-center justify-center pointer-events-none transition-all duration-1200 ${loaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
           <div className="relative hero-float" style={{ width: 'min(520px, 82vw)' }}>
 
             {/* Bubbles */}
@@ -196,7 +196,7 @@ export function Home() {
         </div>
 
         <div className={`relative z-10 max-w-7xl mx-auto px-6 w-full pt-28 pb-20 transition-all duration-1000 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="max-w-3xl">
+          <div className="max-w-3xl mx-auto lg:mx-0 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-ice-300 text-xs font-semibold mb-6 border border-ice-500/20">
               <span className="w-1.5 h-1.5 rounded-full bg-ice-400 animate-pulse" />
               {hero.badge_text}
@@ -210,7 +210,7 @@ export function Home() {
             <p className="text-ice-100/70 text-lg leading-relaxed mb-7 max-w-lg"
               dangerouslySetInnerHTML={{ __html: hero.subheadline }} />
 
-            <div className="flex gap-7 mb-7">
+            <div className="flex gap-7 mb-7 justify-center lg:justify-start">
               {stats.map(({ icon, value, label, color }) => {
                 const Icon = ICON_MAP[icon] || Shield;
                 return (
@@ -223,7 +223,7 @@ export function Home() {
               })}
             </div>
 
-            <div className="flex flex-wrap gap-3 mb-6">
+            <div className="flex flex-wrap gap-3 mb-6 justify-center lg:justify-start">
               <Link to="/products" className="glow-button inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-ice-500 text-white font-bold text-sm shadow-lg shadow-ice-500/35 hover:bg-ice-400 transition-colors">
                 {hero.btn_products_text} <ArrowRight className="w-4 h-4" />
               </Link>
@@ -233,7 +233,7 @@ export function Home() {
               </a>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
               {services.map(({ icon, text }) => {
                 const Icon = ICON_MAP[icon] || Shield;
                 return (
