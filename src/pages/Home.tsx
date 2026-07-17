@@ -201,13 +201,13 @@ export function Home() {
               <span className="w-1.5 h-1.5 rounded-full bg-ice-400 animate-pulse" />
               {hero.badge_text}
             </div>
-            <h1 className="font-display text-[2.5rem] sm:text-5xl lg:text-[4.6rem] font-bold leading-[1.12] lg:leading-[1.04] tracking-tight lg:tracking-normal text-white mb-5">
+            <h1 className="font-display text-5xl lg:text-[4.6rem] font-bold leading-[1.04] text-white mb-5">
               {hero.headline_line1}<br />
               <span className="gradient-text text-glow">{hero.headline_line2}</span><br />
               {hero.headline_line3}<br />
               <span className="gradient-text">{hero.headline_line4}</span>
             </h1>
-            <p className="text-ice-100/70 text-base sm:text-lg leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0"
+            <p className="text-ice-100/70 text-lg leading-relaxed mb-7 max-w-lg mx-auto lg:mx-0"
               dangerouslySetInnerHTML={{ __html: hero.subheadline }} />
 
             <div className="flex gap-7 mb-7 justify-center lg:justify-start">
