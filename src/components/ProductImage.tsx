@@ -6,9 +6,9 @@ interface Props {
 export default function ProductImage({ className, style }: Props) {
   return (
     <img
-      src="/uploads/gel-pack-new.jpg"
+      src="/uploads/PHOTO-2026-07-16-20-33-03-removebg-preview.png"
       alt="Dove Ice Gel Pack"
-      className={`product-img ${className ?? ''}`}
+      className={className}
       style={style}
       draggable={false}
     />
