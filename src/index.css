@@ -970,13 +970,7 @@ h1, h2, h3, h4, h5, h6 {
 .product-3d-scene {
   position: relative;
   transform-style: preserve-3d;
-  animation: product-3d-rotate 9s ease-in-out infinite;
-  will-change: transform;
-}
-
-@keyframes product-3d-rotate {
-  0%, 100% { transform: rotateY(-10deg) rotateX(3deg); }
-  50%      { transform: rotateY(10deg)  rotateX(-2deg); }
+  transform: rotateY(-6deg) rotateX(2deg);
 }
 
 .product-3d-card {
@@ -1020,13 +1014,8 @@ h1, h2, h3, h4, h5, h6 {
     transparent 48%
   );
   mix-blend-mode: screen;
-  animation: product-3d-sheen 6s ease-in-out infinite;
+  opacity: 0.5;
   z-index: 3;
-}
-
-@keyframes product-3d-sheen {
-  0%, 100% { opacity: 0.4; transform: translateX(0); }
-  50%      { opacity: 0.85; transform: translateX(8%); }
 }
 
 .product-3d-rim {
@@ -1070,6 +1059,5 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .product-3d-scene { animation: none; }
-  .product-3d-gloss { animation: none; }
+  .product-3d-scene { transform: none; }
 }
