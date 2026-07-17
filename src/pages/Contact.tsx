@@ -60,7 +60,7 @@ export function Contact() {
       </section>
 
       {/* ─── CONTACT SECTION — white ─── */}
-      <section className="py-16 max-w-7xl mx-auto px-6 light-section-white">
+      <section className="py-16 max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16 light-section-white">
         <div className="grid lg:grid-cols-5 gap-10">
           {/* Left column — contact info */}
           <div className="lg:col-span-2 space-y-5 section-reveal">
@@ -171,7 +171,7 @@ export function Contact() {
       </section>
 
       {/* ─── FAQ — light blue ─── */}
-      <section className="py-16 max-w-7xl mx-auto px-6 light-section-blue">
+      <section className="py-16 max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16 light-section-blue">
         <div className="text-center mb-10 section-reveal">
           <h2 className="font-display text-3xl font-bold light-heading mb-2">
             {contact_page.faq_title_line1} <span className="gradient-text-dark">{contact_page.faq_title_line2}</span>

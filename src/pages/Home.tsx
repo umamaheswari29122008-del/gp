@@ -195,8 +195,8 @@ export function Home() {
           </div>
         </div>
 
-        <div className={`relative z-10 max-w-7xl mx-auto px-6 w-full pt-28 pb-20 transition-all duration-1000 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <div className="max-w-3xl mx-auto md:mx-0 text-center md:text-left md:max-w-[52%]">
+        <div className={`relative z-10 max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16 w-full pt-28 pb-20 transition-all duration-1000 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className="max-w-3xl mx-auto md:mx-0 text-center md:text-left md:max-w-[52%] lg:max-w-[48%] xl:max-w-[45%]">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-ice-300 text-xs font-semibold mb-6 border border-ice-500/20">
               <span className="w-1.5 h-1.5 rounded-full bg-ice-400 animate-pulse" />
               {hero.badge_text}
@@ -254,7 +254,7 @@ export function Home() {
 
       {/* ─── BIG STATS — light blue ─── */}
       <section className="py-12 border-y border-[#c5ddf5] light-section-blue">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {big_stats.map((s, i) => (
               <div key={s.label} className="section-reveal text-center" style={{ transitionDelay: `${i * 0.08}s` }}>
@@ -269,7 +269,7 @@ export function Home() {
 
       {/* ─── SHORT ABOUT — dark theme ─── */}
       <section className="py-16" style={{ background: 'linear-gradient(180deg, #04101e 0%, #030c1e 100%)' }}>
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="section-reveal">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-ice-400 text-sm font-semibold mb-5">{home_sections.about_badge}</div>
@@ -309,7 +309,7 @@ export function Home() {
 
       {/* ─── PRODUCTS SECTION — light blue ─── */}
       <section className="py-16 light-section-blue">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16">
           <div className="text-center mb-10 section-reveal">
             <div className="light-badge mb-4">{home_sections.products_badge}</div>
             <h2 className="font-display text-4xl lg:text-5xl font-bold light-heading mb-3">
@@ -337,7 +337,7 @@ export function Home() {
 
       {/* ─── APPLICATIONS — dark theme ─── */}
       <section className="py-16" style={{ background: 'linear-gradient(180deg, #030c1e 0%, #04101e 100%)' }}>
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16">
           <div className="text-center mb-10 section-reveal">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-ice-400 text-sm font-semibold mb-4">{home_sections.applications_badge}</div>
             <h2 className="font-display text-4xl lg:text-5xl font-bold text-white mb-3">
@@ -420,7 +420,7 @@ export function Home() {
 
       {/* ─── VALUES — light blue ─── */}
       <section className="py-10 light-section-blue">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16">
           <div className="text-center mb-10 section-reveal">
             <div className="light-badge mb-4">{about_page.values_badge}</div>
             <h2 className="font-display text-4xl lg:text-5xl font-bold light-heading mb-3">

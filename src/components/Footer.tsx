@@ -30,7 +30,7 @@ export function Footer() {
 
   return (
     <footer className="relative" style={{ background: 'linear-gradient(180deg, #030c1e 0%, #051022 100%)', borderTop: '1px solid rgba(13,178,232,0.12)' }}>
-      <div className="max-w-7xl mx-auto px-6 pt-16 pb-8">
+      <div className="max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16 pt-16 pb-8">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           <div className="space-y-4">
             <NavLink to="/" className="flex items-center gap-2.5">

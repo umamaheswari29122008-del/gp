@@ -53,7 +53,7 @@ export function About() {
 
       {/* STATS — white background */}
       <section className="py-16" style={{ background: '#ffffff' }}>
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {about_stats.map(({ value, label, icon }, i) => {
               const Icon = ICON_MAP[icon] || Shield;
@@ -73,7 +73,7 @@ export function About() {
 
       {/* OUR STORY */}
       <section className="py-28" style={{ background: '#030c1e' }}>
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16">
           <div className="text-center mb-16 section-reveal">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-ice-400 text-xs font-semibold mb-4">{about_page.story_badge}</div>
             <h2 className="font-display text-4xl lg:text-5xl font-bold text-white mb-3">
@@ -99,7 +99,7 @@ export function About() {
 
       {/* VALUES — white background */}
       <section className="py-16" style={{ background: '#ffffff' }}>
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16">
           <div className="text-center mb-14 section-reveal">
             <div className="light-badge mb-4">{about_page.values_badge}</div>
             <h2 className="font-display text-4xl font-bold text-[#0d2a5a] mb-3">

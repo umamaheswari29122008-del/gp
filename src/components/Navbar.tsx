@@ -39,7 +39,7 @@ export function Navbar() {
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'py-3 shadow-lg shadow-black/10' : 'py-5'}`}
       style={{ background: '#ffffff', borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-4">
+      <div className="max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16 flex items-center justify-between gap-4">
         <NavLink to="/" className="flex items-center gap-2.5 group flex-shrink-0">
           <img src="/dove-logo.png" alt="Dove Gel Packs" className="h-10 object-contain group-hover:scale-105 transition-all duration-300" />
         </NavLink>

@@ -42,7 +42,7 @@ export function Applications() {
 
       {/* ─── APPLICATIONS GRID — white background ─── */}
       <section className="py-16" style={{ background: '#ffffff' }}>
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
             {applications.map((app, i) => (
               <div key={app.id || app.title} className="section-reveal light-card rounded-2xl overflow-hidden group" style={{ transitionDelay: `${i * 0.07}s` }}>
