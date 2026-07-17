@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MessageCircle, ArrowRight, ChevronRight } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
+import { FrozenHeroFX } from '../components/FrozenHeroFX';
 
 function ProductCard({ variant, accentFrom, accentTo }: { variant: { name: string; image?: string }; accentFrom: string; accentTo: string }) {
   return (
@@ -78,7 +79,8 @@ export function Products() {
     <div className="products-page">
       <section className="products-hero section-reveal">
         <div className="products-hero-grid-bg" />
-        <div className="products-hero-inner">
+        <FrozenHeroFX />
+        <div className="products-hero-inner relative z-[3]">
           <div className="products-hero-tag">{products_page.hero_badge}</div>
           <h1 className="products-hero-title">{products_page.hero_title_line1}<br /><span className="gradient-text">{products_page.hero_title_line2}</span></h1>
           <p className="products-hero-sub">{products_page.hero_sub}</p>

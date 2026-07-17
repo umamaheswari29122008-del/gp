@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { MessageCircle, Mail, Phone, MapPin, Send, Clock, CheckCircle2 } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
+import { FrozenHeroFX } from '../components/FrozenHeroFX';
 
 function useReveal() {
   useEffect(() => {
@@ -47,7 +48,8 @@ export function Contact() {
         style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(13,178,232,0.09) 0%, transparent 65%), linear-gradient(135deg, #030c1e 0%, #071528 60%, #0a1d38 100%)' }}>
         <div className="absolute inset-0 pointer-events-none opacity-[0.022]"
           style={{ backgroundImage: 'linear-gradient(rgba(56,201,247,1) 1px, transparent 1px), linear-gradient(90deg, rgba(56,201,247,1) 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
-        <div className="max-w-3xl mx-auto px-6 text-center section-reveal">
+        <FrozenHeroFX />
+        <div className="max-w-3xl mx-auto px-6 text-center section-reveal relative z-[3]">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-ice-400 text-xs font-semibold mb-5">{contact_page.hero_badge}</div>
           <h1 className="font-display text-5xl lg:text-6xl font-bold text-white mb-5 leading-tight">
             {contact_page.hero_title_line1}<br />
