@@ -148,49 +148,50 @@ export function Home() {
           style={{ background: 'linear-gradient(to bottom, transparent, #030c1e)' }} />
 
         {/* Product — right side of hero */}
-        <div className={`absolute right-0 top-0 bottom-0 w-full lg:w-[50%] z-[2] flex items-center justify-center pointer-events-none transition-all duration-1200 ${loaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}
-          style={{ isolation: 'isolate' }}>
+        <div className={`absolute right-0 top-0 bottom-0 w-full lg:w-[50%] z-[2] flex items-center justify-center pointer-events-none transition-all duration-1200 ${loaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}>
+          <div className="relative hero-float" style={{ width: 'min(520px, 82vw)' }}>
 
-          {/* Orbit ring + bubbles container */}
-          <div className="relative" style={{ width: 'min(520px, 82vw)' }}>
+            {/* Bubbles */}
+            {[
+              { size: 9,  top: '8%',  left: '18%', delay: '0s',   dur: '6.2s' },
+              { size: 6,  top: '14%', left: '72%', delay: '1.1s', dur: '5.4s' },
+              { size: 13, top: '22%', left: '5%',  delay: '0.4s', dur: '7.8s' },
+              { size: 7,  top: '38%', left: '88%', delay: '2.3s', dur: '6s'   },
+              { size: 5,  top: '55%', left: '12%', delay: '1.7s', dur: '5s'   },
+              { size: 10, top: '60%', left: '80%', delay: '0.9s', dur: '8.1s' },
+              { size: 8,  top: '72%', left: '30%', delay: '3s',   dur: '6.6s' },
+              { size: 5,  top: '78%', left: '65%', delay: '1.5s', dur: '5.7s' },
+              { size: 12, top: '85%', left: '48%', delay: '2.8s', dur: '7.2s' },
+              { size: 6,  top: '90%', left: '10%', delay: '0.2s', dur: '6.9s' },
+              { size: 4,  top: '48%', left: '95%', delay: '3.5s', dur: '5.2s' },
+              { size: 9,  top: '30%', left: '58%', delay: '2.1s', dur: '8.4s' },
+            ].map((b, i) => (
+              <span
+                key={i}
+                className="bubble"
+                style={{
+                  width: b.size,
+                  height: b.size,
+                  top: b.top,
+                  left: b.left,
+                  ['--dur' as string]: b.dur,
+                  ['--delay' as string]: b.delay,
+                }}
+              />
+            ))}
 
-            {/* Ambient glow — behind everything */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 0 }}>
+            {/* Ambient glow */}
+            <div className="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none">
               <div className="hero-glow" />
             </div>
 
-            {/* Orbiting blue bubbles — 12 dots on a circular path */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 1 }}>
-              {Array.from({ length: 12 }, (_, i) => {
-                const angle = (i / 12) * 360;
-                const radius = 52; // % of container
-                const delay = `${(i / 12) * 9}s`;
-                const size = i % 3 === 0 ? 11 : i % 2 === 0 ? 7 : 5;
-                return (
-                  <span
-                    key={i}
-                    className="orbit-bubble"
-                    style={{
-                      ['--sz' as string]: `${size}px`,
-                      ['--angle' as string]: `${angle}deg`,
-                      ['--radius' as string]: `${radius}%`,
-                      ['--delay' as string]: delay,
-                    } as React.CSSProperties}
-                  />
-                );
-              })}
-            </div>
-
-            {/* Product with 3D half-rotation flip animation */}
-            <div className="product-flip-wrap" style={{ position: 'relative', zIndex: 2 }}>
-              <ProductImage className="w-full h-auto select-none block" />
-            </div>
-
-            {/* Ground shadow */}
+            {/* Soft ground shadow */}
             <div
-              className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-3/5 h-8 blur-2xl rounded-full pointer-events-none"
-              style={{ zIndex: 0, background: 'radial-gradient(ellipse, rgba(0,140,255,0.28), transparent 70%)' }}
+              className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-3/5 h-10 blur-3xl rounded-full -z-10"
+              style={{ background: 'radial-gradient(ellipse, rgba(30,100,220,0.22), transparent 70%)' }}
             />
+
+            <ProductImage className="relative z-[1] w-full h-auto select-none block" />
           </div>
         </div>
 

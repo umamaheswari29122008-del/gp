@@ -906,79 +906,56 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.05em;
 }
 
-/* =============================================
-   PRODUCT HERO — 3-D FLIP + ORBIT BUBBLES
-   ============================================= */
-
-/* 3-D half-rotation flip (front → 180° → front) with gentle float */
-@keyframes product-flip {
-  0%   { transform: perspective(900px) rotateY(0deg)   translateY(0px); }
-  20%  { transform: perspective(900px) rotateY(90deg)  translateY(-10px); }
-  40%  { transform: perspective(900px) rotateY(180deg) translateY(-18px); }
-  60%  { transform: perspective(900px) rotateY(180deg) translateY(-10px); }
-  80%  { transform: perspective(900px) rotateY(90deg)  translateY(-4px); }
-  100% { transform: perspective(900px) rotateY(0deg)   translateY(0px); }
+/* Hero product floating animation */
+@keyframes hero-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-16px) rotate(0.6deg); }
+  66%       { transform: translateY(-8px) rotate(-0.4deg); }
 }
 
-.product-flip-wrap {
-  animation: product-flip 7s ease-in-out infinite;
+.hero-float {
+  animation: hero-float 7s ease-in-out infinite;
   will-change: transform;
-  transform-style: preserve-3d;
 }
 
-/* Ambient glow behind product */
+/* Ambient glow */
 @keyframes hero-glow-pulse {
-  0%, 100% { opacity: 0.25; transform: scale(0.88); }
-  50%       { opacity: 0.50; transform: scale(1.10); }
+  0%, 100% { opacity: 0.3; transform: scale(0.9); }
+  50%       { opacity: 0.55; transform: scale(1.08); }
 }
 
 .hero-glow {
-  width: 80%;
-  height: 80%;
+  width: 72%;
+  height: 72%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 150, 255, 0.32) 0%, rgba(0, 80, 200, 0.12) 45%, transparent 70%);
+  background: radial-gradient(circle, rgba(80, 160, 255, 0.28) 0%, rgba(20, 80, 180, 0.10) 45%, transparent 70%);
   animation: hero-glow-pulse 5.5s ease-in-out infinite;
   will-change: transform, opacity;
 }
 
-/* Orbiting bubble: each dot starts at its --angle on a circle of
-   radius --radius, then the whole ring spins continuously */
-@keyframes orbit-spin {
-  from { transform: rotate(var(--angle, 0deg)) translateX(var(--radius, 50%)) rotate(0deg); }
-  to   { transform: rotate(calc(var(--angle, 0deg) + 360deg)) translateX(var(--radius, 50%)) rotate(-360deg); }
+/* Bubble animation */
+@keyframes bubble-rise {
+  0%   { transform: translateY(0) scale(1);    opacity: 0; }
+  10%  { opacity: 0.7; }
+  80%  { opacity: 0.5; }
+  100% { transform: translateY(-120px) scale(1.4); opacity: 0; }
 }
 
-@keyframes orbit-pulse {
-  0%, 100% { opacity: 0.55; transform: scale(1); }
-  50%       { opacity: 0.90; transform: scale(1.25); }
+@keyframes bubble-wobble {
+  0%, 100% { margin-left: 0; }
+  33%       { margin-left: 6px; }
+  66%       { margin-left: -5px; }
 }
 
-.orbit-bubble {
+.bubble {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  transform-origin: 0 0;
-  animation: orbit-spin 9s linear infinite var(--delay, 0s);
-  will-change: transform;
-  pointer-events: none;
-}
-
-.orbit-bubble::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: var(--sz, 8px);
-  height: var(--sz, 8px);
-  margin-top: calc(var(--sz, 8px) / -2);
-  margin-left: calc(var(--sz, 8px) / -2);
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, rgba(160, 215, 255, 0.95), rgba(0, 120, 255, 0.50) 55%, transparent 75%);
-  border: 0.5px solid rgba(100, 190, 255, 0.60);
+  background: radial-gradient(circle at 35% 35%, rgba(180, 220, 255, 0.85), rgba(100, 170, 255, 0.35) 50%, transparent 75%);
+  border: 0.5px solid rgba(150, 210, 255, 0.45);
   box-shadow:
-    0 0 6px rgba(0, 140, 255, 0.50),
-    inset 0 -1px 2px rgba(255, 255, 255, 0.35);
-  animation: orbit-pulse 2.5s ease-in-out infinite var(--delay, 0s);
+    inset 0 -1px 2px rgba(255,255,255,0.3),
+    0 0 6px rgba(80,160,255,0.2);
+  animation: bubble-rise var(--dur, 6s) ease-in infinite var(--delay, 0s),
+             bubble-wobble calc(var(--dur, 6s) * 0.7) ease-in-out infinite var(--delay, 0s);
+  will-change: transform, opacity;
 }
