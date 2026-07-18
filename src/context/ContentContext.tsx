@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
+import { supabase } from '../lib/supabase';
 
 // ── Exact interfaces pages destructure ────────────────────────────────────────
 export interface SiteInfo {
@@ -329,6 +330,7 @@ const D: SiteContent = {
 };
 
 const Ctx = createContext<SiteContent>(D);
+const ApiCtx = createContext<{ save: (c: SiteContent) => Promise<void>; loading: boolean; saving: boolean }>({ save: async () => {}, loading: true, saving: false });
 
 // ── Map PHP API response → SiteContent ────────────────────────────────────────
 function applyApi(data: Record<string, unknown>): SiteContent {
@@ -534,15 +536,49 @@ function applyApi(data: Record<string, unknown>): SiteContent {
 
 export function ContentProvider({ children }: { children: ReactNode }) {
   const [content, setContent] = useState<SiteContent>(D);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetch('./api/content.php')
-      .then(r => r.ok ? r.json() : null)
-      .then(data => { if (data && typeof data === 'object') setContent(applyApi(data)); })
-      .catch(() => {});
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data, error } = await supabase
+          .from('site_content')
+          .select('data')
+          .eq('id', 1)
+          .maybeSingle();
+        if (!cancelled && !error && data && data.data && typeof data.data === 'object' && Object.keys(data.data).length > 0) {
+          setContent(applyApi(data.data as Record<string, unknown>));
+        }
+      } catch {
+        // fall back to defaults
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
   }, []);
 
-  return <Ctx.Provider value={content}>{children}</Ctx.Provider>;
+  const save = useCallback(async (c: SiteContent) => {
+    setSaving(true);
+    try {
+      const { error } = await supabase
+        .from('site_content')
+        .upsert({ id: 1, data: c as unknown as Record<string, unknown> }, { onConflict: 'id' });
+      if (error) throw error;
+      setContent(c);
+    } finally {
+      setSaving(false);
+    }
+  }, []);
+
+  return (
+    <Ctx.Provider value={content}>
+      <ApiCtx.Provider value={{ save, loading, saving }}>{children}</ApiCtx.Provider>
+    </Ctx.Provider>
+  );
 }
 
 export function useContent() { return useContext(Ctx); }
+export function useContentApi() { return useContext(ApiCtx); }

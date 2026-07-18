@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, ChevronDown, Shield, Zap, RotateCcw, Timer, Droplets, Award, Thermometer, Star, Quote, Image as ImageIcon, CheckCircle2, Globe, Users, Leaf } from 'lucide-react';
 import MagicRings from '../components/MagicRings';
 import ProductImage from '../components/ProductImage';
@@ -48,7 +48,7 @@ function ProductPhotoCard({
   const hasImage = !!product.image;
 
   return (
-    <div className="section-reveal light-card rounded-2xl overflow-hidden group flex flex-col"
+    <Link to="/products" className="section-reveal light-card rounded-2xl overflow-hidden group flex flex-col cursor-pointer"
       style={{ transitionDelay: `${index * 0.08}s` }}>
 
       {/* ── Photo / placeholder area ── */}
@@ -106,7 +106,7 @@ function ProductPhotoCard({
           <span className="text-[#2a6aaa] text-sm">{product.sizes}</span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
