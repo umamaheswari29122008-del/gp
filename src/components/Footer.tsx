@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import { Mail, Phone, MapPin } from 'lucide-react';
-import { DoveLogo } from './DoveLogo';
 import { useContent } from '../context/ContentContext';
 
 const quickLinks = [
@@ -33,12 +32,8 @@ export function Footer() {
       <div className="max-w-7xl lg:max-w-[1440px] xl:max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16 pt-16 pb-8">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
           <div className="space-y-4">
-            <NavLink to="/" className="flex items-center gap-2.5">
-              {site.logo_url ? (
-                <img src={site.logo_url} alt={site.site_name} className="w-10 h-10 object-contain" />
-              ) : (
-                <DoveLogo className="w-10 h-10" />
-              )}
+            <NavLink to="/" className="flex items-center gap-2.5 group">
+              <img src="/dove-logo.png" alt={site.site_name} className="h-10 object-contain group-hover:scale-105 transition-all duration-300" />
               <div className="leading-none">
                 <span className="font-display font-bold text-white text-lg">{site.footer_brand_name}</span>
               </div>
